@@ -1,3 +1,41 @@
+# IntelliJ IDEA
+.idea/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# User-specific files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Dependency directories
+target/
+lib/
+
 # Compiled class file
 *.class
 
