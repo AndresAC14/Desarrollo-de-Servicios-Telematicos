@@ -23,23 +23,28 @@ public class Cliente {
 			
 			creaSocket();
 			
-			// Creacion del mensaje 
-			// -> Aqui llamo a un metodo de Mensaje y le paso los parametros necesarios
-		
+			// Leemos los atributos de consola		
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
 			System.out.println("Introducir identificador del cliente");
-			mensaje1.setIdCliente(Integer.parseInt(stdIn.readLine()));
+			int idCliente = Integer.parseInt(stdIn.readLine());
 			
 			System.out.println("Introducir nombre de usuario");
-			mensaje1.setNombreCliente(stdIn.readLine());
-			
-			mensaje1.setIp(InetAddress.getLocalHost()); // Se puede coger con una funcion
-			mensaje1.setCodigoMensaje("123"); // Generar de alguna manera o ponerlo yo
-			
+			String nombreCliente = stdIn.readLine();
+
+			String codigoMensaje = "1_cliente_solicita_credencial";
+			InetAddress ipCliente = InetAddress.getByName("0.0.0.0");
+						
+			// Creacion del mensaje
+			mensaje1.establecerAtributos(idCliente, 0, 
+				InetAddress.getLocalHost(), ipCliente, 
+				nombreCliente, "", codigoMensaje, 0, "", 
+				false, false);
+				
+			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
 			//PRUEBA -> cambiar luego
-			DatagramPacket envio = new DatagramPacket(new byte[ECHOMAX], ECHOMAX); // = mensaje.creaPaquete();
+			DatagramPacket envio = new DatagramPacket(new byte[ECHOMAX], ECHOMAX); 
 			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
 			socket.send(envio);
