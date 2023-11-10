@@ -20,12 +20,13 @@ public class Cliente {
 		Mensaje mensaje1 = new Mensaje();
 		Mensaje mensaje2 = new Mensaje();
 		Mensaje mensaje3 = new Mensaje();
-		
+				
 		try {
 			
 			creaSocketEnvio();
 			
 			// Creacion trama 1
+
 			// Leemos los atributos de consola		
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
@@ -33,35 +34,42 @@ public class Cliente {
 			System.out.println("Introducir identificador del cliente");
 			int idCliente = Integer.parseInt(stdIn.readLine());
 			
-
 			// Usuario introduce su nombre en la terminal
 			System.out.println("Introducir nombre de usuario");
 			String nombreCliente = stdIn.readLine();
 
-			String codigoMensaje = "Cliente_Solicita_Credencial";
-			InetAddress ipCliente = InetAddress.getLocalHost(); //InetAddress.getByName("0.0.0.0");
+			// Codigo del mensaje 1
+			String codigoMensaje = "1_Cliente_Solicita_Credencial";
+
+			// Ip cliente y servidor
+			InetAddress ipCliente = InetAddress.getLocalHost();
+			InetAddress ipServidor = InetAddress.getByName("0.0.0.0"); // Inicializar a 0.0.0.0
 						
 			// Creacion del mensaje
 			mensaje1.establecerAtributos(idCliente, 0, 
-				InetAddress.getLocalHost(), ipCliente, 
+				ipCliente, ipServidor, 
 				nombreCliente, "", codigoMensaje, 0, "", 
 				false, false);
 			
 			// Mostrar el mensaje que se va a enviar
 			mensaje1.toString();
-			
-			System.out.println("Enviando mensaje 1....");
-
+					
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
-			//PRUEBA -> cambiar luego
+			// Creacion del datagrama
 			DatagramPacket envio = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
 			
+			System.out.println("Enviando mensaje 1....");
+
 			// Cliente envia en broadcast a todos lo servidores
 			socketEnvio.send(envio);
+
+			// IMPORTANTE -> No se si hace falta cerrar el socket aqui
 			socketEnvio.close();
 			
+			// Recepcion trama 2
+
 			// Crea socket en el que recibirá
 			creaSocketRecibo(3000);
 
@@ -79,8 +87,28 @@ public class Cliente {
 
 
 			// Creacion trama 3
+			int idServidor = mensaje2.getIdServidor(); 
+			ipServidor = mensaje2.getIpServidor();
+			String nombreServidor = mensaje2.getNombreServidor();
+			int accesoN = mensaje2.getAccesoN();
+			String asiento = mensaje2.getAsiento();
+
+			String codigoMensaje2 = "3_Cliente_Acepta_Credencial";
+
+			mensaje3.establecerAtributos(idCliente, idServidor, 
+				ipCliente, ipServidor, nombreCliente, nombreServidor, 
+				codigoMensaje2, accesoN, asiento, true, false);
+
+
+			// Mostrar el mensaje que se va a enviar
+			mensaje3.toString();
+					
+			// Codificacion mensaje antes de enviar
+			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
 			
-			String codigoMensaje2 = "Cliente_Acepta_Credencial";
+			// Creacion del datagrama
+			envio = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
+
 			System.out.println("Enviando mensaje 3....");
 			// Vuelve a enviar en broadcast pero los servidores no seleccionados
 			// ponen como disponibles las credenciales que ofrecieron

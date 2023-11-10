@@ -14,6 +14,7 @@ public class Servidor {
 	private static DatagramSocket socketRecibo;
 	private static InetAddress ip;
 	private static int puerto;
+	private static String nombreServidor = "S1";
 	// Crear variables para reenvio, timeout, retrasos
 
 	public static void main(String[] args) throws IOException{

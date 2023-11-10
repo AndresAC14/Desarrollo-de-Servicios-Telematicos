@@ -23,17 +23,19 @@ public class ServidorThread extends Thread{
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(paquete.getData());
 
+            // Primero pillar el id de servidor -> 
+            // si esta asignado y es distinto poner como disponibles las credenciales que ofrecieron
+            // si esta asignado y es igual, mandar mensaje con 4.Servidor confirma asignacion
+
             // Mostramos el mensaje
             mensaje1.toString();
 
             // PROCESAR FICHERO
-            //1. Comprobar que el usuario se encuentra en el fichero
-            //2. Contiene accesoN, asiento e identificador servidor
+            //1. Comprobar que el id usuario se encuentra en el fichero
+            // IMPORTANTE: Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
+            //2. Mensaje 2 -> Contiene accesoN, asiento e identificador servidor
             //3. Poner como asignadas las credenciales que envia al cliente.
-            // IMPORTANTE: Si no encuentra el identificador del cliente
-            // en el fichero, manda mensaje "servidor_no_encuentra_cliente"
-            // indicando que no existe en el fichero
-
+            
             //mensaje2.establecerAtributos();
 
             byte[] servidor_ofrece_credencial = mensaje2.codificarMensaje();
