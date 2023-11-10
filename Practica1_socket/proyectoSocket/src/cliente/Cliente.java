@@ -78,6 +78,7 @@ public class Cliente {
 			
 			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
 			socketRecibo.receive(recibo);
+			socketRecibo.close();
 			
 			// Decodificar mensaje recibido
 			mensaje2.decodificarMensaje(recibo.getData());
@@ -106,19 +107,16 @@ public class Cliente {
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
 			
+			// Crear de nuevo el socket por el que se enviará
+			creaSocketEnvio();
+			
 			// Creacion del datagrama
 			envio = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
 
 			System.out.println("Enviando mensaje 3....");
-			// Vuelve a enviar en broadcast pero los servidores no seleccionados
-			// ponen como disponibles las credenciales que ofrecieron
-			// para sucesivas peticiones y ya no envian a este
-			/*socket.send(envio);
-			socket.receive(recibo);
-			socket.close();
-			*/
 			
-			
+			socketEnvio.send(envio);
+			socketEnvio.close();
 			
 			
 		}catch(Exception e) {
@@ -141,12 +139,6 @@ public class Cliente {
 	public static void creaSocketRecibo(int puerto) throws IOException {
 		// Creacion del socket UDP
 		socketRecibo = new DatagramSocket(puerto);
-		
-		// Direccion de envio -> Broadcast
-		//ip = InetAddress.getByName("192.168.167.255");
-		
-		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
-		//puerto = 3000;
 	}
 	
 }
