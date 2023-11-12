@@ -2,7 +2,7 @@ package cliente;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
+//import java.util.*;
 
 import mensaje.Mensaje;
 
@@ -10,20 +10,27 @@ public class Cliente {
 
 	// Tam. maximo de mensaje
 	private static final int ECHOMAX = 255;
-	private static DatagramSocket socketEnvio;
-	private static DatagramSocket socketRecibo;
+	//private static DatagramSocket socketEnvio;
+	//private static DatagramSocket socketRecibo;
+	private static DatagramSocket socket;
 	private static InetAddress ip;
 	private static int puerto;
 	// Crear variables para reenvio, timeout, retrasos
+	// Temporizador de retransmision (ms)
+	private static final int TIMEOUT = 3000;
+	// Maximo numero de retransmisiones
+	private static final int MAXTRIES = 5; 
+
 	
 	public static void main(String[] args) throws IOException{
 		Mensaje mensaje1 = new Mensaje();
 		Mensaje mensaje2 = new Mensaje();
 		Mensaje mensaje3 = new Mensaje();
+		Mensaje mensaje4 = new Mensaje();
 				
 		try {
 			
-			creaSocketEnvio();
+			creaSocket();
 			
 			// Creacion trama 1
 
@@ -58,30 +65,35 @@ public class Cliente {
 			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
 			// Creacion del datagrama
-			DatagramPacket envio = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
+			DatagramPacket envio1 = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
 			
 			System.out.println("Enviando mensaje 1....");
 
 			// Cliente envia en broadcast a todos lo servidores
-			socketEnvio.send(envio);
+			//socketEnvio.send(envio);
+			socket.send(envio1);
 
 			// IMPORTANTE -> No se si hace falta cerrar el socket aqui
-			socketEnvio.close();
+			//socketEnvio.close();
 			
 			// Recepcion trama 2
 
 			// Crea socket en el que recibirá
-			creaSocketRecibo(3000);
+			//creaSocketRecibo(3000);
 
 			// Ajustar el tamaño del paquete??
-			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
+			DatagramPacket recibo2 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
+			// Para el timeout de 2 segundos
+			//socket.setSoTimeout(TIMEOUT);
+
 			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
-			socketRecibo.receive(recibo);
-			socketRecibo.close();
-			
+			//socketRecibo.receive(recibo);
+			//socketRecibo.close();
+			socket.receive(recibo2);
+
 			// Decodificar mensaje recibido
-			mensaje2.decodificarMensaje(recibo.getData());
+			mensaje2.decodificarMensaje(recibo2.getData());
 
 			// Mostrar mensaje recibido
 			mensaje2.toString();
@@ -108,16 +120,39 @@ public class Cliente {
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
 			
 			// Crear de nuevo el socket por el que se enviará
-			creaSocketEnvio();
+			//creaSocketEnvio();
 			
 			// Creacion del datagrama
-			envio = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
+			DatagramPacket envio3 = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
 
 			System.out.println("Enviando mensaje 3....");
 			
-			socketEnvio.send(envio);
-			socketEnvio.close();
+			//socketEnvio.send(envio);
+			//socketEnvio.close();
+			socket.send(envio3);
+
+			// Recepcion trama 4 o 5
+
+			// Crea socket en el que recibirá
+			//creaSocketRecibo(3000);
+
+			// Ajustar el tamaño del paquete??
+			DatagramPacket recibo4 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
+			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
+			//socketRecibo.receive(recibo4);
+			//socketRecibo.close();
+			socket.receive(recibo4);
+
+
+			// Decodificar mensaje recibido
+			mensaje4.decodificarMensaje(recibo4.getData());
+
+			// Mostrar mensaje recibido
+			mensaje4.toString();
+
+			// Fin del programa de cliente
+			socket.close();
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -125,20 +160,22 @@ public class Cliente {
 
 	}
 
-	public static void creaSocketEnvio() throws IOException {
-		// Creacion del socket UDP
-		socketEnvio = new DatagramSocket();
-		
+	public static void creaSocket() throws IOException {
 		// Direccion de envio -> Broadcast
 		ip = InetAddress.getByName("192.168.167.255");
 		
 		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
 		puerto = 3000;
+
+		// Creacion del socket UDP
+		//socketEnvio = new DatagramSocket();
+		socket = new DatagramSocket(puerto);
 	}
 
+	/* 
 	public static void creaSocketRecibo(int puerto) throws IOException {
 		// Creacion del socket UDP
 		socketRecibo = new DatagramSocket(puerto);
 	}
-	
+	*/
 }
