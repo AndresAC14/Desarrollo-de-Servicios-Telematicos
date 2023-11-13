@@ -17,9 +17,9 @@ public class Cliente {
 	private static int puerto;
 	// Crear variables para reenvio, timeout, retrasos
 	// Temporizador de retransmision (ms)
-	private static final int TIMEOUT = 3000;
+	//***************private static final int TIMEOUT = 3000;
 	// Maximo numero de retransmisiones
-	private static final int MAXTRIES = 5; 
+	//***************private static final int MAXTRIES = 5; 
 
 	
 	public static void main(String[] args) throws IOException{
@@ -55,7 +55,7 @@ public class Cliente {
 			// Creacion del mensaje
 			mensaje1.establecerAtributos(idCliente, 0, 
 				ipCliente, ipServidor, 
-				nombreCliente, "", codigoMensaje, 0, "", 
+				nombreCliente, "sd", codigoMensaje, 0, "sd", 0, "sd", 
 				false, false);
 			
 			// Mostrar el mensaje que se va a enviar
@@ -103,14 +103,16 @@ public class Cliente {
 			int idServidor = mensaje2.getIdServidor(); 
 			ipServidor = mensaje2.getIpServidor();
 			String nombreServidor = mensaje2.getNombreServidor();
+			int codigoServidorAceptado = mensaje2.getCodigoServidorAceptado();
+			String nombreServidorAceptado = mensaje2.getNombreServidorAceptado();
 			int accesoN = mensaje2.getAccesoN();
 			String asiento = mensaje2.getAsiento();
-
 			String codigoMensaje2 = "3_Cliente_Acepta_Credencial";
 
 			mensaje3.establecerAtributos(idCliente, idServidor, 
 				ipCliente, ipServidor, nombreCliente, nombreServidor, 
-				codigoMensaje2, accesoN, asiento, true, false);
+				codigoMensaje2, codigoServidorAceptado, nombreServidorAceptado,
+				accesoN, asiento, true, false);
 
 
 			// Mostrar el mensaje que se va a enviar

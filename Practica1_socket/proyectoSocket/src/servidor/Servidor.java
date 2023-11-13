@@ -2,9 +2,6 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
-
-import mensaje.Mensaje;
 
 public class Servidor {
 
@@ -13,8 +10,6 @@ public class Servidor {
 	private static DatagramSocket socket;
 	private static InetAddress ip;
 	private static int puerto;
-	// Este nombre cambiarlo en los diferentes pc en los que se ejecute el programa
-	private static String nombreServidor = "S1";
 	// Crear variables para reenvio, timeout, retrasos
 
 	public static void main(String[] args) throws IOException{
@@ -46,7 +41,7 @@ public class Servidor {
 	}
 
 	public static void creaSocket() throws IOException {
-		// Direccion de envio -> Broadcast
+		// Direccion de recepcion -> Broadcast
 		ip = InetAddress.getByName("192.168.167.255");
 		
 		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo

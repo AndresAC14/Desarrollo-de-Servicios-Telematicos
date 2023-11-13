@@ -1,13 +1,21 @@
 package servidor;
 
 import java.io.*;
-import java.io.FileReader;
 import java.net.*;
 import java.util.*;
 import mensaje.Mensaje;
 
 public class ServidorThread extends Thread{
 
+    // Informacion del servidor
+    private static InetAddress ip;
+	private static int puerto;
+    private static DatagramSocket socket;
+    // Este nombre cambiarlo en los diferentes pc en los que se ejecute el programa
+	private static String nombreServidor = "S1";
+    private static int codigoServidor = 1;
+
+    // Variables
     private DatagramPacket recibido;
     private DatagramPacket envio;
     private Mensaje mensaje1;
@@ -37,32 +45,54 @@ public class ServidorThread extends Thread{
             int idCliente = mensaje1.getIdCliente();
             boolean encontrado = false;
 
-            // PROCESAR FICHERO
-            try(Scanner sc = new Scanner("BaseDatos.txt")) {
-                while(sc.hasNextLine()){
-                    String linea = sc.nextLine();
-                    
-                    String[] partes = linea.split(";");
+            int accesoN = -1;
+            String asiento = "";
+            char asignado;
+            int idFichero;
 
-                    //2. Mensaje 2 -> Contiene accesoN, asiento e identificador servidor
-                    int accesoN = Integer.parseInt(partes[0]);
-                    String asiento = partes[1];
-                    // Segun chatGPT se obtiene asi, sino pone del tiron
-                    char asignado = partes[2].charAt(0); 
+            boolean servidorAceptado = (idServidor == codigoServidor) 
+                                    && (mensaje1.getNombreServidorAceptado() == nombreServidor);
 
+            if(!servidorAceptado){
+
+
+            }else{
+
+                // PROCESAR FICHERO
+                try(Scanner sc = new Scanner("BaseDatos.txt")) {
+                    while(sc.hasNextLine() && !encontrado){
+                        String linea = sc.nextLine();
+                        
+                        String[] partes = linea.split(";");
+    
+                        //2. Mensaje 2 -> Contiene accesoN, asiento e identificador servidor
+                        accesoN = Integer.parseInt(partes[0]);
+                        asiento = partes[1];
+                        // Segun chatGPT se obtiene asi, sino pone del tiron
+                        asignado = partes[2].charAt(0); 
+                        idFichero = Integer.parseInt(partes[3]);
+    
+                        // FALTAN COSAS
+    
+                        encontrado = (idCliente == idFichero);               
+                    }
                     
-                     
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                
-            } catch (Exception e) {
-                e.printStackTrace();
+
             }
             
-            
             // IMPORTANTE: Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
-            //3. Poner como asignadas las credenciales que envia al cliente.
+            String codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
             
-            //mensaje2.establecerAtributos();
+            //3. Poner como asignadas las credenciales que envia al cliente. NI IDEA
+            
+            InetAddress ipServidor = InetAddress.getLocalHost();
+
+            mensaje2.establecerAtributos(idCliente, idServidor, mensaje1.getIpCliente(), ipServidor,
+                    mensaje1.getNombreCliente(), nombreServidor, codigoMensaje, 
+                    0, "sd", accesoN, asiento, false, true);
 
             byte[] servidor_ofrece_credencial = mensaje2.codificarMensaje();
 
@@ -76,5 +106,17 @@ public class ServidorThread extends Thread{
         }   
 
     }
+
+    public static void creaSocket() throws IOException {
+		// Direccion de envio -> Broadcast
+		ip = InetAddress.getByName("192.168.167.255");
+		
+		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
+		puerto = 3000;
+
+		// Creacion del socket UDP
+		//socketEnvio = new DatagramSocket();
+		socket = new DatagramSocket(puerto);
+	}
 
 }
