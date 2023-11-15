@@ -55,7 +55,8 @@ public class Cliente {
 			// Creacion del mensaje
 			mensaje1.establecerAtributos(idCliente, 0, 
 				ipCliente, ipServidor, 
-				nombreCliente, "sd", codigoMensaje, 0, "sd", 0, "sd", 
+				nombreCliente, "sd", codigoMensaje, 
+				0, "sd", 0, "sd", 
 				false, false);
 			
 			// Mostrar el mensaje que se va a enviar
