@@ -13,7 +13,7 @@ public class ServidorThread extends Thread{
     private static DatagramSocket socket;
     
     // Variables mensaje
-    private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa 
+    private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa  
     private static int codigoServidor = 1;
 
     private static int idCliente;

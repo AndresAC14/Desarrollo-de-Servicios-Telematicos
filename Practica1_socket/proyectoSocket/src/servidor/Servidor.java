@@ -27,7 +27,7 @@ public class Servidor {
 			socket.receive(recibo);
 
 			// Procesa el paquete la hebra, BUCLE y tiempo de espera importante, para que cada hebra muestre lo suyo y ya despues se vera
-			// Cuando se recibe un paquete, crea un hilo para procesarlo
+			// Cuando se recibe un paquete, crea un hilo para procesarlo 
 			Thread servidorThread = new Thread(new ServidorThread(recibo));
 			servidorThread.start();
 

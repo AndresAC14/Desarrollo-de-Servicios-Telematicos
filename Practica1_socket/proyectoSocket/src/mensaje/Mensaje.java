@@ -16,7 +16,7 @@ public class Mensaje {
 	private String nombreServidorAceptado; // NUEVO
 	private int accesoN;
 	private String asiento;
-	private boolean aceptado; // Seria servidorAcepta
+	private boolean aceptado; // Seria servidorAcepta 
 	private boolean encontrado;
 	
 	public int getIdCliente() {	return idCliente; }

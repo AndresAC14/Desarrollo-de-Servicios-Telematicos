@@ -17,7 +17,7 @@ public class Cliente {
 	private static int puerto;
 	// Crear variables para reenvio, timeout, retrasos
 	// Temporizador de retransmision (ms)
-	//***************private static final int TIMEOUT = 3000;
+	//***************private static final int TIMEOUT = 3000; 
 	// Maximo numero de retransmisiones
 	//***************private static final int MAXTRIES = 5; 
 
