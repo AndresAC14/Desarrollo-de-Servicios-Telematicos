@@ -124,7 +124,7 @@ public class Mensaje {
 		setEncontrado(in.readBoolean());
 	}
 
-	// Posible hacer un metodo para mostrar el contenido de la trama (forma de tabla o algo)
+	/* Posible hacer un metodo para mostrar el contenido de la trama (forma de tabla o algo)
 	@Override
     public String toString() {
         String tableFormat = "| %-15s | %-15s | %-15s | %-15s | %-20s | %-20s | %-15s | %-15s | %-15s | %-8d | %-15s | %-8b | %-8b |%n";
@@ -132,5 +132,5 @@ public class Mensaje {
         String separator = "-------------------------------------------------------------------------------------------\n";
 
         return String.format(separator + header + separator + tableFormat, idCliente, idServidor, ipCliente, ipServidor, nombreCliente, nombreServidor, codigoMensaje, codigoServidorAceptado, nombreServidorAceptado, accesoN, asiento, aceptado, encontrado);
-    }
+    }*/
 }
