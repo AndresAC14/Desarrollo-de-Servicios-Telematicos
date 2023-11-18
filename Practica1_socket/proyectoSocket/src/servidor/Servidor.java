@@ -6,7 +6,7 @@ import java.net.*;
 public class Servidor {
 
 	// Tam. maximo de mensaje
-	private static final int ECHOMAX = 255;
+	private static final int ECHOMAX = 1024;
 	private static DatagramSocket socket;
 	private static InetAddress ip;
 	private static int puerto;
@@ -32,8 +32,8 @@ public class Servidor {
 
 			// Procesa el paquete la hebra, BUCLE y tiempo de espera importante, para que cada hebra muestre lo suyo y ya despues se vera
 			// Cuando se recibe un paquete, crea un hilo para procesarlo 
-			Thread servidorThread = new Thread(new ServidorThread(recibo));
-			servidorThread.start();
+			ServidorThread servidorThread = new ServidorThread(recibo.getData());
+			new Thread(servidorThread).start();
 
 			Thread.sleep(1000); // 1 segundo
 			System.out.println("Servidor en espera de que termine de procesarse el mensaje....");

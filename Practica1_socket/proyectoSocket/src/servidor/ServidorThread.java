@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import mensaje.Mensaje;
 
-public class ServidorThread extends Thread{
+public class ServidorThread implements Runnable{
 
     // Informacion del servidor
     private static InetAddress ip;
@@ -30,12 +30,12 @@ public class ServidorThread extends Thread{
     private static int idFichero;
 
     // Tramas
-    private DatagramPacket recibido;
+    private byte[] recibido;
     private static DatagramPacket envio;
     private static Mensaje mensaje1;
     private static Mensaje mensaje2;
 
-    public ServidorThread(DatagramPacket recibido){
+    public ServidorThread(byte[] recibido){
 
         this.recibido = recibido;
 
@@ -44,9 +44,13 @@ public class ServidorThread extends Thread{
     public void run(){
 
         try{
+            mensaje1 = new Mensaje();
             // Decodificamos el mensaje
-            mensaje1.decodificarMensaje(recibido.getData());
+            mensaje1.decodificarMensaje(recibido);
             System.out.println("Mensaje decodificado");
+            System.out.println("Mostrando mensaje recibido...");
+            // Mostramos el mensaje
+            System.out.println(mensaje1.toString());
 
             // Primero pillar el id de servidor -> 
             idServidor = mensaje1.getIdServidor();
@@ -54,9 +58,6 @@ public class ServidorThread extends Thread{
             // si esta asignado y es igual, mandar mensaje con 4.Servidor confirma asignacion
             ipServidor = InetAddress.getLocalHost();
 
-            System.out.println("Mostrando mensaje...");
-            // Mostramos el mensaje
-            mensaje1.toString();
 
             //1. Comprobar que el id cliente se encuentra en el fichero
             idCliente = mensaje1.getIdCliente();
