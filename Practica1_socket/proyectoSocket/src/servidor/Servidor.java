@@ -35,6 +35,7 @@ public class Servidor {
 			Thread servidorThread = new Thread(new ServidorThread(recibo));
 			servidorThread.start();
 
+			Thread.sleep(1000); // 1 segundo
 			System.out.println("Servidor en espera de que termine de procesarse el mensaje....");
 			Thread.sleep(1000); // 1 segundo
 

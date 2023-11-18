@@ -19,7 +19,34 @@ public class Mensaje {
 	private String asiento;
 	private boolean aceptado; // Seria servidorAcepta 
 	private boolean encontrado;
+
+	// Constructor por defecto
+    public Mensaje() {
+        // Puedes inicializar los atributos con valores por defecto si lo deseas.
+    }
+
+    // Constructor con parámetros para establecer los atributos al crear una instancia
+    public Mensaje(int idCliente, int idServidor, InetAddress ipCliente, InetAddress ipServidor,
+                   String nombreCliente, String nombreServidor, String codigoMensaje,
+                   int codigoServidorAceptado, String nombreServidorAceptado,
+                   int accesoN, String asiento, boolean aceptado, boolean encontrado) {
+
+        this.idCliente = idCliente;
+        this.idServidor = idServidor;
+        this.ipCliente = ipCliente;
+        this.ipServidor = ipServidor;
+        this.nombreCliente = nombreCliente;
+        this.nombreServidor = nombreServidor;
+        this.codigoMensaje = codigoMensaje;
+        this.codigoServidorAceptado = codigoServidorAceptado;
+        this.nombreServidorAceptado = nombreServidorAceptado;
+        this.accesoN = accesoN;
+        this.asiento = asiento;
+        this.aceptado = aceptado;
+        this.encontrado = encontrado;
+    }
 	
+	// Get y Set de cada variable
 	public int getIdCliente() {	return idCliente; }
 	public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
 	
@@ -59,7 +86,7 @@ public class Mensaje {
 	public boolean isEncontrado() { return encontrado;	}
 	public void setEncontrado(boolean encontrado) {	this.encontrado = encontrado; }
 	
-	
+	// Establece todos los atributos de la trama
 	public void establecerAtributos(int idCliente,int idServidor, 
 		InetAddress ipCliente, InetAddress ipServidor, 
 		String nombreCliente, String nombreServidor, 
@@ -80,9 +107,10 @@ public class Mensaje {
 			setAsiento(asiento);
 			setAceptado(aceptado);
 			setEncontrado(encontrado);
+			System.out.println("Todo chill");
 	}
 
-
+	// Codifica la trama
 	public byte[] codificarMensaje() throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(byteStream);
@@ -107,6 +135,7 @@ public class Mensaje {
         return byteStream.toByteArray();
     }
 
+	// Decodifica la trama
     public void decodificarMensaje(byte[] mensaje) throws IOException {
         ByteArrayInputStream byteStream = new ByteArrayInputStream(mensaje);
         DataInputStream in = new DataInputStream(byteStream);
@@ -136,23 +165,27 @@ public class Mensaje {
 
     @Override
     public String toString() {
-        return "Mensaje{" +
-                "idCliente=" + idCliente +
-                ", idServidor=" + idServidor +
-                ", ipCliente=" + ipCliente +
-                ", ipServidor=" + ipServidor +
-                ", nombreCliente='" + nombreCliente + '\'' +
-                ", nombreServidor='" + nombreServidor + '\'' +
-                ", codigoMensaje='" + codigoMensaje + '\'' +
-                ", codigoServidorAceptado=" + codigoServidorAceptado +
-                ", nombreServidorAceptado='" + nombreServidorAceptado + '\'' +
-                ", accesoN=" + accesoN +
-                ", asiento='" + asiento + '\'' +
-                ", aceptado=" + aceptado +
-                ", encontrado=" + encontrado +
-                '}';
+    	StringBuilder sb = new StringBuilder();
+        sb.append(String.format("| %-30s | %-20s |%n", "Atributo", "Valor"));
+        sb.append("|-------------------------------------------------------|\n");
+        sb.append(String.format("| %-30s | %-20d |%n", "idCliente", idCliente));
+        sb.append(String.format("| %-30s | %-20d |%n", "idServidor", idServidor));
+        sb.append(String.format("| %-30s | %-20s |%n", "ipCliente", ipCliente));
+        sb.append(String.format("| %-30s | %-20s |%n", "ipServidor", ipServidor));
+        sb.append(String.format("| %-30s | %-20s |%n", "nombreCliente", nombreCliente));
+        sb.append(String.format("| %-30s | %-20s |%n", "nombreServidor", nombreServidor));
+        sb.append(String.format("| %-30s | %-20s |%n", "codigoMensaje", codigoMensaje));
+        sb.append(String.format("| %-30s | %-20d |%n", "codigoServidorAceptado", codigoServidorAceptado));
+        sb.append(String.format("| %-30s | %-20s |%n", "nombreServidorAceptado", nombreServidorAceptado));
+        sb.append(String.format("| %-30s | %-20d |%n", "accesoN", accesoN));
+        sb.append(String.format("| %-30s | %-20s |%n", "asiento", asiento));
+        sb.append(String.format("| %-30s | %-20b |%n", "aceptado", aceptado));
+        sb.append(String.format("| %-30s | %-20b |%n", "encontrado", encontrado));
+        sb.append("|-------------------------------------------------------|\n");
+        return sb.toString();
     }
 
+	// Metodos auxiliares para la correcta codificacion y decodificacion de la trama
     private void writeFixedLengthString(DataOutputStream out, String s, int length) throws IOException {
         byte[] bytes = new byte[length];
         byte[] stringBytes = s.getBytes(StandardCharsets.UTF_8);

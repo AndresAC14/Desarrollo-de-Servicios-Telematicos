@@ -60,13 +60,13 @@ public class Cliente {
 				false, false);
 			
 			// Mostrar el mensaje que se va a enviar
-			mensaje1.toString();
+			System.out.println(mensaje1.toString());
 					
 			// Codificacion mensaje antes de enviar
-			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
+			//byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
 			// Creacion del datagrama
-			DatagramPacket envio1 = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
+			DatagramPacket envio1 = new DatagramPacket(mensaje1.codificarMensaje(), mensaje1.codificarMensaje().length, ip, puerto); 
 			
 			System.out.println("Enviando mensaje 1....");
 
