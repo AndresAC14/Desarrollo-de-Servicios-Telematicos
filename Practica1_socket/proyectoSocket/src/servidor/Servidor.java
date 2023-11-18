@@ -19,12 +19,16 @@ public class Servidor {
 			// Crea socket en el que recibirá mensaje
 			creaSocket();
 
+			System.out.println("Socket creado");
+
 			// Cuidado con el tam
 			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
 			// Recibe el servidor y redirige el paquete a la hebra
 			// Espera a que llegue el mensaje
 			socket.receive(recibo);
+
+			System.out.println("Paquete recibido, creando hebra...");
 
 			// Procesa el paquete la hebra, BUCLE y tiempo de espera importante, para que cada hebra muestre lo suyo y ya despues se vera
 			// Cuando se recibe un paquete, crea un hilo para procesarlo 
@@ -42,7 +46,7 @@ public class Servidor {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de recepcion -> Broadcast
-		ip = InetAddress.getByName("192.168.167.255");
+		ip = InetAddress.getByName("192.168.18.255");
 		
 		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
 		puerto = 3000;

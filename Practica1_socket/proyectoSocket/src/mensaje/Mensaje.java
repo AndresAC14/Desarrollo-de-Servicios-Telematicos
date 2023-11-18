@@ -1,6 +1,7 @@
 package mensaje;
 
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.io.*;
 
 public class Mensaje {
@@ -82,55 +83,86 @@ public class Mensaje {
 	}
 
 
-	public byte[] codificarMensaje() throws IOException{
+	public byte[] codificarMensaje() throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(byteStream);
 
-		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(byteStream);
-		
-		out.writeInt(this.idCliente);
-		out.writeInt(this.idServidor);
-		out.write(this.ipCliente.getAddress(), 0, 4);
-		out.write(this.ipServidor.getAddress(), 0, 4);
-		out.write(this.nombreCliente.getBytes(), 0, 64);
-		out.write(this.nombreServidor.getBytes(), 0, 64);
-		out.write(this.codigoMensaje.getBytes(), 0, 64);
-		out.writeInt(this.codigoServidorAceptado);
-		out.write(this.nombreServidorAceptado.getBytes(), 0, 64);
-		out.writeInt(this.accesoN);
-		out.write(this.asiento.getBytes(), 0, 64);
-		out.writeBoolean(this.aceptado);
-		out.writeBoolean(this.encontrado);
-		
-		return byteStream.toByteArray();
-	}
-	
-	public void decodificarMensaje(byte[] mensaje) throws IOException{
+        out.writeInt(this.idCliente);
+        out.writeInt(this.idServidor);
 
-		ByteArrayInputStream byteStream = new ByteArrayInputStream(mensaje);
-		DataInputStream in = new DataInputStream(byteStream);
+        out.write(this.ipCliente.getAddress(), 0, this.ipCliente.getAddress().length);
+        out.write(this.ipServidor.getAddress(), 0, this.ipServidor.getAddress().length);
 
-		setIdCliente(in.readInt()) ;
-		setIdServidor(in.readInt());
-		setIpCliente(InetAddress.getByAddress(in.readNBytes(4)));
-		setIpServidor(InetAddress.getByAddress(in.readNBytes(4)));
-		setNombreCliente(new String(in.readNBytes(64)));
-		setNombreServidor(new String(in.readNBytes(64)));
-		setCodigoMensaje(new String(in.readNBytes(64)));
-		setCodigoServidorAceptado(in.readInt());
-		setNombreServidorAceptado(new String(in.readNBytes(64)));
-		setAccesoN(in.readInt());
-		setAsiento(new String(in.readNBytes(64)));
-		setAceptado(in.readBoolean());
-		setEncontrado(in.readBoolean());
-	}
+        writeFixedLengthString(out, this.nombreCliente, 64);
+        writeFixedLengthString(out, this.nombreServidor, 64);
+        writeFixedLengthString(out, this.codigoMensaje, 64);
+        writeFixedLengthString(out, this.nombreServidorAceptado, 64);
+        writeFixedLengthString(out, this.asiento, 64);
 
-	/* Posible hacer un metodo para mostrar el contenido de la trama (forma de tabla o algo)
-	@Override
+        out.writeInt(this.codigoServidorAceptado);
+        out.writeInt(this.accesoN);
+        out.writeBoolean(this.aceptado);
+        out.writeBoolean(this.encontrado);
+
+        return byteStream.toByteArray();
+    }
+
+    public void decodificarMensaje(byte[] mensaje) throws IOException {
+        ByteArrayInputStream byteStream = new ByteArrayInputStream(mensaje);
+        DataInputStream in = new DataInputStream(byteStream);
+
+        setIdCliente(in.readInt());
+        setIdServidor(in.readInt());
+
+        byte[] ipClienteBytes = new byte[4];
+        in.readFully(ipClienteBytes);
+        setIpCliente(InetAddress.getByAddress(ipClienteBytes));
+
+        byte[] ipServidorBytes = new byte[4];
+        in.readFully(ipServidorBytes);
+        setIpServidor(InetAddress.getByAddress(ipServidorBytes));
+
+        setNombreCliente(readFixedLengthString(in, 64));
+        setNombreServidor(readFixedLengthString(in, 64));
+        setCodigoMensaje(readFixedLengthString(in, 64));
+        setNombreServidorAceptado(readFixedLengthString(in, 64));
+        setAsiento(readFixedLengthString(in, 64));
+
+        setCodigoServidorAceptado(in.readInt());
+        setAccesoN(in.readInt());
+        setAceptado(in.readBoolean());
+        setEncontrado(in.readBoolean());
+    }
+
+    @Override
     public String toString() {
-        String tableFormat = "| %-15s | %-15s | %-15s | %-15s | %-20s | %-20s | %-15s | %-15s | %-15s | %-8d | %-15s | %-8b | %-8b |%n";
-        String header = String.format(tableFormat, "idCliente", "idServidor", "ipCliente", "ipServidor", "nombreCliente", "nombreServidor", "codigoMensaje", "codigoServidorAceptado", "nombreServidorAceptado", "accesoN", "asiento", "aceptado", "encontrado");
-        String separator = "-------------------------------------------------------------------------------------------\n";
+        return "Mensaje{" +
+                "idCliente=" + idCliente +
+                ", idServidor=" + idServidor +
+                ", ipCliente=" + ipCliente +
+                ", ipServidor=" + ipServidor +
+                ", nombreCliente='" + nombreCliente + '\'' +
+                ", nombreServidor='" + nombreServidor + '\'' +
+                ", codigoMensaje='" + codigoMensaje + '\'' +
+                ", codigoServidorAceptado=" + codigoServidorAceptado +
+                ", nombreServidorAceptado='" + nombreServidorAceptado + '\'' +
+                ", accesoN=" + accesoN +
+                ", asiento='" + asiento + '\'' +
+                ", aceptado=" + aceptado +
+                ", encontrado=" + encontrado +
+                '}';
+    }
 
-        return String.format(separator + header + separator + tableFormat, idCliente, idServidor, ipCliente, ipServidor, nombreCliente, nombreServidor, codigoMensaje, codigoServidorAceptado, nombreServidorAceptado, accesoN, asiento, aceptado, encontrado);
-    }*/
+    private void writeFixedLengthString(DataOutputStream out, String s, int length) throws IOException {
+        byte[] bytes = new byte[length];
+        byte[] stringBytes = s.getBytes(StandardCharsets.UTF_8);
+        System.arraycopy(stringBytes, 0, bytes, 0, Math.min(stringBytes.length, length));
+        out.write(bytes, 0, length);
+    }
+
+    private String readFixedLengthString(DataInputStream in, int length) throws IOException {
+        byte[] bytes = new byte[length];
+        in.readFully(bytes);
+        return new String(bytes, StandardCharsets.UTF_8).trim();
+    }
 }

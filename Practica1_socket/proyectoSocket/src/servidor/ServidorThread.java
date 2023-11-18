@@ -46,6 +46,7 @@ public class ServidorThread extends Thread{
         try{
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(recibido.getData());
+            System.out.println("Mensaje decodificado");
 
             // Primero pillar el id de servidor -> 
             idServidor = mensaje1.getIdServidor();
@@ -53,6 +54,7 @@ public class ServidorThread extends Thread{
             // si esta asignado y es igual, mandar mensaje con 4.Servidor confirma asignacion
             ipServidor = InetAddress.getLocalHost();
 
+            System.out.println("Mostrando mensaje...");
             // Mostramos el mensaje
             mensaje1.toString();
 
