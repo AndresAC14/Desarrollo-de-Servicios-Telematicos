@@ -104,6 +104,7 @@ public class Cliente {
 
 
 			// Creacion trama 3
+			mensaje3 = new Mensaje();
 			int idServidor = mensaje2.getIdServidor(); 
 			ipServidor = mensaje2.getIpServidor();
 			String nombreServidor = mensaje2.getNombreServidor();
@@ -120,7 +121,8 @@ public class Cliente {
 
 
 			// Mostrar el mensaje que se va a enviar
-			mensaje3.toString();
+			System.out.println("Mostrando mensaje 3...");
+			System.out.println(mensaje3.toString());
 					
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
@@ -150,12 +152,13 @@ public class Cliente {
 			//socketRecibo.close();
 			socket.receive(recibo4);
 
-
 			// Decodificar mensaje recibido
+			mensaje4 = new Mensaje();
 			mensaje4.decodificarMensaje(recibo4.getData());
 
 			// Mostrar mensaje recibido
-			mensaje4.toString();
+			System.out.println("Mostrando mensaje 4...");
+			System.out.println(mensaje4.toString());
 
 			// Fin del programa de cliente
 			socket.close();

@@ -94,6 +94,10 @@ public class ServidorThread implements Runnable{
             }
             
             byte[] servidor_ofrece_credencial = mensaje2.codificarMensaje();
+            
+            System.out.println("Mostrando mensaje antes del envio \n" + mensaje2.toString());
+            
+            creaSocket();
 
             envio = new DatagramPacket(servidor_ofrece_credencial, servidor_ofrece_credencial.length, ip, puerto);
             
