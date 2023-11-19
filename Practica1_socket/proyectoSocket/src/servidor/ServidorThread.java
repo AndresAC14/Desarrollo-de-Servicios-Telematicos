@@ -48,8 +48,9 @@ public class ServidorThread implements Runnable{
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(recibido);
             System.out.println("Mensaje decodificado");
-            System.out.println("Mostrando mensaje recibido...");
+            
             // Mostramos el mensaje
+            System.out.println("Mostrando mensaje recibido...");
             System.out.println(mensaje1.toString());
 
             // Primero pillar el id de servidor -> 
@@ -66,9 +67,14 @@ public class ServidorThread implements Runnable{
             boolean servidorAceptado = (mensaje1.getCodigoServidorAceptado() == codigoServidor) 
                                     && (mensaje1.getNombreServidorAceptado().equals(nombreServidor));
 
+            mensaje2 = new Mensaje();
             if(!servidorAceptado){
                 // Enviar el codigo 4
                 codigoMensaje = "4_Servidor_Confirma_Asignacion";
+                mensaje2.establecerAtributos(idCliente, idServidor, mensaje1.getIpCliente(), ipServidor, mensaje1.getNombreCliente(),
+                                                nombreServidor, codigoMensaje, codigoServidor, nombreServidor, mensaje1.getAccesoN(), 
+                                                mensaje1.getAsiento(), true, true);
+
 
             }else{
 
@@ -104,7 +110,7 @@ public class ServidorThread implements Runnable{
 
     public static void creaSocket() throws IOException {
 		// Direccion de envio -> Broadcast
-		ip = InetAddress.getByName("192.168.167.255");
+		ip = InetAddress.getByName("192.168.18.255");
 		
 		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
 		puerto = 3000;

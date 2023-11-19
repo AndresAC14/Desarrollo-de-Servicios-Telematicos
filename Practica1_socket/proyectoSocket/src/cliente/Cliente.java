@@ -91,13 +91,16 @@ public class Cliente {
 			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
 			//socketRecibo.receive(recibo);
 			//socketRecibo.close();
+			System.out.println("Esperando recepcion mensaje 2...");
 			socket.receive(recibo2);
 
 			// Decodificar mensaje recibido
+			mensaje2 = new Mensaje();
 			mensaje2.decodificarMensaje(recibo2.getData());
 
 			// Mostrar mensaje recibido
-			mensaje2.toString();
+			System.out.println("Mostrando mensaje 2...");
+			System.out.println(mensaje2.toString());
 
 
 			// Creacion trama 3

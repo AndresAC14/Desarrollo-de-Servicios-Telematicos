@@ -107,7 +107,6 @@ public class Mensaje {
 			setAsiento(asiento);
 			setAceptado(aceptado);
 			setEncontrado(encontrado);
-			System.out.println("Todo chill");
 	}
 
 	// Codifica la trama
