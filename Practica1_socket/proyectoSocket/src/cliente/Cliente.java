@@ -118,7 +118,7 @@ public class Cliente {
 			mensaje3.establecerAtributos(idCliente, idServidor, 
 				ipCliente, ipServidor, nombreCliente, nombreServidor, 
 				codigoMensaje2, codigoServidorAceptado, nombreServidorAceptado,
-				accesoN, asiento, true, false);
+				accesoN, asiento, true, true);
 
 
 			// Mostrar el mensaje que se va a enviar
@@ -127,9 +127,12 @@ public class Cliente {
 					
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
+
+			// Retardo
+			Thread.sleep(1000);
 						
 			creaSocket();
-			
+
 			// Creacion del datagrama
 			DatagramPacket envio3 = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
 

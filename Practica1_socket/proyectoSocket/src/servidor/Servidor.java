@@ -47,6 +47,9 @@ public class Servidor {
 
 			}
 			
+			// Retardo para que pueda procesar bien la trama anterior y recibir la nueva
+			Thread.sleep(1000);
+
 			// Crea socket
 			creaSocket();
 
@@ -78,6 +81,8 @@ public class Servidor {
 				System.out.println("NO es el servidor aceptado");
 			}	
 
+			// Retardo
+			Thread.sleep(2000);
 			System.out.println("FIN");
 
 		} catch (Exception e) {

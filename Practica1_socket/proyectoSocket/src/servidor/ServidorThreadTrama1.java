@@ -91,6 +91,11 @@ public class ServidorThreadTrama1 implements Runnable{
             // Cerramos el socket
             socket.close();
 
+            if(codigoMensaje.equals("5_Servidor_No_Encuentra_Cliente")){
+                System.out.println("FIN");
+                System.exit(0);
+            }
+
         }catch(Exception e){
             e.printStackTrace();
         }   
@@ -131,7 +136,7 @@ public class ServidorThreadTrama1 implements Runnable{
             
             // FALTAN COSAS -> Poner como asignadas las credenciales es borrar la linea
             // if(encontrado) asignarCredenciales(int linea);
-            // else if(!encontrado) accesoN = 0; asiento = "sd";
+            if(!encontrado) accesoN = 0; asiento = "sd";
                     
         } catch (Exception e) {
             e.printStackTrace();
