@@ -56,7 +56,7 @@ public class ServidorThreadTrama1 implements Runnable{
             idCliente = mensaje1.getIdCliente();
             encontrado = false;
                  
-            // PROCESAR FICHERO
+            // Procesa el fichero
             procesarFichero();
             
             // Creamos el mensaje que llevará la trama 2
@@ -72,7 +72,7 @@ public class ServidorThreadTrama1 implements Runnable{
                 0, "sd", 
                 accesoN, asiento, false, encontrado);
         
-            
+            // Codificacion mensaje antes de enviar
             byte[] servidor_ofrece_credencial = mensaje2.codificarMensaje();
             
             System.out.println("Mostrando mensaje antes del envio \n" + mensaje2.toString());
@@ -80,7 +80,7 @@ public class ServidorThreadTrama1 implements Runnable{
             // Creamos el socket por el que se enviará
             creaSocket();
 
-            // Creamos el datagrama que se enviara
+            // Creacion del datagrama
             envio = new DatagramPacket(servidor_ofrece_credencial, servidor_ofrece_credencial.length, ip, puerto);
             
             System.out.println("Enviando trama con ServidorThreadTrama1....");
@@ -90,6 +90,7 @@ public class ServidorThreadTrama1 implements Runnable{
 
             // Cerramos el socket
             socket.close();
+
         }catch(Exception e){
             e.printStackTrace();
         }   
@@ -104,7 +105,6 @@ public class ServidorThreadTrama1 implements Runnable{
 		puerto = 3000;
 
 		// Creacion del socket UDP
-		//socketEnvio = new DatagramSocket();
 		socket = new DatagramSocket(puerto);
 	}
 

@@ -10,25 +10,19 @@ public class Cliente {
 
 	// Tam. maximo de mensaje
 	private static final int ECHOMAX = 1024;
-	//private static DatagramSocket socketEnvio;
-	//private static DatagramSocket socketRecibo;
+
+	// Socket
 	private static DatagramSocket socket;
 	private static InetAddress ip;
 	private static int puerto;
-	// Crear variables para reenvio, timeout, retrasos
-	// Temporizador de retransmision (ms)
-	//***************private static final int TIMEOUT = 3000; 
-	// Maximo numero de retransmisiones
-	//***************private static final int MAXTRIES = 5; 
 
 	
 	public static void main(String[] args) throws IOException{
 						
 		try {
-			
-			creaSocket();
-			
-			// Creacion trama 1
+			/*
+			 * Creacion trama 1
+			 */
 
 			// Leemos los atributos de consola		
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
@@ -60,36 +54,36 @@ public class Cliente {
 			System.out.println(mensaje1.toString());
 					
 			// Codificacion mensaje antes de enviar
-			//byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
+			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
 			// Creacion del datagrama
-			DatagramPacket envio1 = new DatagramPacket(mensaje1.codificarMensaje(), mensaje1.codificarMensaje().length, ip, puerto); 
+			DatagramPacket envio1 = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
 			
 			System.out.println("Enviando mensaje 1....");
 
 			// Cliente envia en broadcast a todos lo servidores
+			creaSocket();
 			socket.send(envio1);
 			socket.close();
 			
-			// Recepcion trama 2
+			/* 
+			 * Recepcion trama 2
+			 */ 
 
 			// Crea socket en el que recibirá
 			creaSocket();
 
-			// Ajustar el tamaño del paquete??
+			// Creacion del datagrama
 			DatagramPacket recibo2 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
-			// Para el timeout de 2 segundos
-			//socket.setSoTimeout(TIMEOUT);
-
 			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
-			//socketRecibo.receive(recibo);
-			//socketRecibo.close();
 			System.out.println("Esperando recepcion mensaje 2...");
 			socket.receive(recibo2);
 
-			// Decodificar mensaje recibido
+			// Creacion del mensaje
 			Mensaje mensaje2 = new Mensaje();
+
+			// Decodificar mensaje recibido
 			mensaje2.decodificarMensaje(recibo2.getData());
 
 			// Mostrar mensaje recibido
@@ -97,17 +91,28 @@ public class Cliente {
 			System.out.println(mensaje2.toString());
 
 			socket.close();
+
+			// Si recibe la trama con el codigo 5 termina la ejecucion
+			if(mensaje2.getCodigoMensaje().equals("5_Servidor_No_Encuentra_Cliente")){
+				// Fin del programa de cliente
+				System.out.println("FIN CLIENTE");
+				System.exit(0);
+			}
 			
-			// Creacion trama 3
+			/*
+			 * Creacion trama 3
+			 */
+
 			int idServidor = mensaje2.getIdServidor(); 
 			ipServidor = mensaje2.getIpServidor();
 			String nombreServidor = mensaje2.getNombreServidor();
-			int codigoServidorAceptado = mensaje2.getCodigoServidorAceptado();
-			String nombreServidorAceptado = mensaje2.getNombreServidorAceptado();
+			int codigoServidorAceptado = mensaje2.getIdServidor();
+			String nombreServidorAceptado = mensaje2.getNombreServidor();
 			int accesoN = mensaje2.getAccesoN();
 			String asiento = mensaje2.getAsiento();
 			String codigoMensaje2 = "3_Cliente_Acepta_Credencial";
-			
+
+			// Creacion del mensaje
 			Mensaje mensaje3 = new Mensaje();
 			mensaje3.establecerAtributos(idCliente, idServidor, 
 				ipCliente, ipServidor, nombreCliente, nombreServidor, 
@@ -130,12 +135,14 @@ public class Cliente {
 			socket.send(envio3);
 			socket.close();
 
-			// Recepcion trama 4 o 5
+			/*
+			 * Recepcion trama 4
+			 */
 
-			// Ajustar el tamaño del paquete??
+			// Creacion del datagrama
 			DatagramPacket recibo4 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
-			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
+			// Se queda esperando hasta que recibe la respuesta
 			creaSocket();
 			socket.receive(recibo4);
 			socket.close();
@@ -149,6 +156,7 @@ public class Cliente {
 			System.out.println(mensaje4.toString());
 
 			// Fin del programa de cliente
+			System.out.println("FIN CLIENTE");
 						
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -164,14 +172,7 @@ public class Cliente {
 		puerto = 3000;
 
 		// Creacion del socket UDP
-		//socketEnvio = new DatagramSocket();
 		socket = new DatagramSocket(puerto);
 	}
 
-	/* 
-	public static void creaSocketRecibo(int puerto) throws IOException {
-		// Creacion del socket UDP
-		socketRecibo = new DatagramSocket(puerto);
-	}
-	*/
 }

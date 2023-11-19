@@ -55,11 +55,11 @@ public class ServidorThreadTrama3 implements Runnable{
                                             mensaje1.getNombreServidorAceptado(), mensaje1.getAccesoN(), mensaje1.getAsiento(), mensaje1.isAceptado(), 
                                             mensaje1.isEncontrado());
 
-            // Codifica el mensaje
-            byte[] servidor_confirma_asignacion = mensaje2.codificarMensaje();
-            
             System.out.println("Mostrando mensaje antes del envio \n" + mensaje2.toString());
             
+            // Codifica el mensaje
+            byte[] servidor_confirma_asignacion = mensaje2.codificarMensaje();
+
             // Creamos el socket por el que se enviará
             creaSocket();
 
