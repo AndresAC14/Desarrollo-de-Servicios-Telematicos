@@ -56,13 +56,14 @@ public class Cliente {
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_solicita_credencial = mensaje1.codificarMensaje();
 			
+			creaSocket();
+
 			// Creacion del datagrama
 			DatagramPacket envio1 = new DatagramPacket(cliente_solicita_credencial, cliente_solicita_credencial.length, ip, puerto); 
 			
 			System.out.println("Enviando mensaje 1....");
 
 			// Cliente envia en broadcast a todos lo servidores
-			creaSocket();
 			socket.send(envio1);
 			socket.close();
 			
@@ -127,11 +128,12 @@ public class Cliente {
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
 						
+			creaSocket();
+			
 			// Creacion del datagrama
 			DatagramPacket envio3 = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
 
 			System.out.println("Enviando mensaje 3....");
-			creaSocket();
 			socket.send(envio3);
 			socket.close();
 
