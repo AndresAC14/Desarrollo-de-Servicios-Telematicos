@@ -39,7 +39,7 @@ public class ServidorThreadTrama3 implements Runnable{
             System.out.println("Mensaje decodificado");
             
             // Mostramos el mensaje
-            System.out.println("Mostrando mensaje recibido...");
+            System.out.println("Mostrando mensaje 3 recibido...");
             System.out.println(mensaje1.toString());
 
             // Creamos el mensaje que llevará la trama 2
@@ -66,7 +66,7 @@ public class ServidorThreadTrama3 implements Runnable{
             // Creamos el datagrama que se enviara
             envio = new DatagramPacket(servidor_confirma_asignacion, servidor_confirma_asignacion.length, ip, puerto);
             
-            System.out.println("Enviando mensaje con Hebra....");
+            System.out.println("Enviando trama con ServidorThreadTrama3....");
 
             // Enviamos la trama
             socket.send(envio);

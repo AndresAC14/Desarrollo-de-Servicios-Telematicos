@@ -31,9 +31,7 @@ public class ServidorThreadTrama1 implements Runnable{
     // Tramas
     private byte[] recibido;
     private static DatagramPacket envio;
-    private static Mensaje mensaje1;
-    private static Mensaje mensaje2;
-
+    
     public ServidorThreadTrama1(byte[] recibido){
 
         this.recibido = recibido;
@@ -44,14 +42,14 @@ public class ServidorThreadTrama1 implements Runnable{
 
         try{
             // Creamos nuevo mensaje en el que almacenar la trama
-            mensaje1 = new Mensaje();
+            Mensaje mensaje1 = new Mensaje();
 
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(recibido);
             System.out.println("Mensaje decodificado");
             
             // Mostramos el mensaje
-            System.out.println("Mostrando mensaje recibido...");
+            System.out.println("Mostrando mensaje 1 recibido...");
             System.out.println(mensaje1.toString());
 
             // Comprobar que el id cliente se encuentra en el fichero
@@ -62,11 +60,10 @@ public class ServidorThreadTrama1 implements Runnable{
             procesarFichero();
             
             // Creamos el mensaje que llevará la trama 2
-            mensaje2 = new Mensaje();
+            Mensaje mensaje2 = new Mensaje();
 
             // Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
             codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
-
             ipServidor = InetAddress.getLocalHost();
             
             // Rellenamos los campos necesarios en la trama
@@ -80,14 +77,19 @@ public class ServidorThreadTrama1 implements Runnable{
             
             System.out.println("Mostrando mensaje antes del envio \n" + mensaje2.toString());
             
+            // Creamos el socket por el que se enviará
             creaSocket();
 
+            // Creamos el datagrama que se enviara
             envio = new DatagramPacket(servidor_ofrece_credencial, servidor_ofrece_credencial.length, ip, puerto);
             
-            System.out.println("Enviando mensaje con Hebra....");
+            System.out.println("Enviando trama con ServidorThreadTrama1....");
 
+            // Enviamos la trama
             socket.send(envio);
 
+            // Cerramos el socket
+            socket.close();
         }catch(Exception e){
             e.printStackTrace();
         }   
@@ -109,7 +111,7 @@ public class ServidorThreadTrama1 implements Runnable{
     // Busca en el fichero si el idCliente está asignado
     public static void procesarFichero(){
 
-        try(Scanner sc = new Scanner("BaseDatos.txt")) {
+        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BaseDatos.txt"))) {
             
             while(sc.hasNextLine() && !encontrado){
                 String linea = sc.nextLine();

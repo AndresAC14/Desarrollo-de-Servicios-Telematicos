@@ -19,9 +19,7 @@ public class Servidor {
     private static int codigoServidor = 1;
 
 	public static void main(String[] args) throws IOException{
-		Mensaje mensaje1 = new Mensaje();
-		Mensaje trama3 = new Mensaje();
-		  
+				  
 		try {
 			
 			// Crea socket en el que recibirá mensaje
@@ -50,6 +48,7 @@ public class Servidor {
 
 			socket.close(); // Sino peta la hebra al mandar por el mismo puerto
 
+			Mensaje mensaje1 = new Mensaje();
 			mensaje1.decodificarMensaje(recibo1.getData());
 
 			boolean servidorAceptado = (mensaje1.getCodigoServidorAceptado() == codigoServidor) 

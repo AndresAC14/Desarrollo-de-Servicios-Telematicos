@@ -23,11 +23,7 @@ public class Cliente {
 
 	
 	public static void main(String[] args) throws IOException{
-		Mensaje mensaje1 = new Mensaje();
-		Mensaje mensaje2 = new Mensaje();
-		Mensaje mensaje3 = new Mensaje();
-		Mensaje mensaje4 = new Mensaje();
-				
+						
 		try {
 			
 			creaSocket();
@@ -53,6 +49,7 @@ public class Cliente {
 			InetAddress ipServidor = InetAddress.getByName("0.0.0.0"); // Inicializar a 0.0.0.0
 						
 			// Creacion del mensaje
+			Mensaje mensaje1 =  new Mensaje();
 			mensaje1.establecerAtributos(idCliente, 0, 
 				ipCliente, ipServidor, 
 				nombreCliente, "sd", codigoMensaje, 
@@ -71,16 +68,13 @@ public class Cliente {
 			System.out.println("Enviando mensaje 1....");
 
 			// Cliente envia en broadcast a todos lo servidores
-			//socketEnvio.send(envio);
 			socket.send(envio1);
-
-			// IMPORTANTE -> No se si hace falta cerrar el socket aqui
-			//socketEnvio.close();
+			socket.close();
 			
 			// Recepcion trama 2
 
 			// Crea socket en el que recibirá
-			//creaSocketRecibo(3000);
+			creaSocket();
 
 			// Ajustar el tamaño del paquete??
 			DatagramPacket recibo2 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
@@ -95,16 +89,16 @@ public class Cliente {
 			socket.receive(recibo2);
 
 			// Decodificar mensaje recibido
-			mensaje2 = new Mensaje();
+			Mensaje mensaje2 = new Mensaje();
 			mensaje2.decodificarMensaje(recibo2.getData());
 
 			// Mostrar mensaje recibido
 			System.out.println("Mostrando mensaje 2...");
 			System.out.println(mensaje2.toString());
 
-
+			socket.close();
+			
 			// Creacion trama 3
-			mensaje3 = new Mensaje();
 			int idServidor = mensaje2.getIdServidor(); 
 			ipServidor = mensaje2.getIpServidor();
 			String nombreServidor = mensaje2.getNombreServidor();
@@ -113,7 +107,8 @@ public class Cliente {
 			int accesoN = mensaje2.getAccesoN();
 			String asiento = mensaje2.getAsiento();
 			String codigoMensaje2 = "3_Cliente_Acepta_Credencial";
-
+			
+			Mensaje mensaje3 = new Mensaje();
 			mensaje3.establecerAtributos(idCliente, idServidor, 
 				ipCliente, ipServidor, nombreCliente, nombreServidor, 
 				codigoMensaje2, codigoServidorAceptado, nombreServidorAceptado,
@@ -126,34 +121,27 @@ public class Cliente {
 					
 			// Codificacion mensaje antes de enviar
 			byte[] cliente_acepta_credencial = mensaje3.codificarMensaje();
-			
-			// Crear de nuevo el socket por el que se enviará
-			//creaSocketEnvio();
-			
+						
 			// Creacion del datagrama
 			DatagramPacket envio3 = new DatagramPacket(cliente_acepta_credencial, cliente_acepta_credencial.length, ip, puerto);
 
 			System.out.println("Enviando mensaje 3....");
-			
-			//socketEnvio.send(envio);
-			//socketEnvio.close();
+			creaSocket();
 			socket.send(envio3);
+			socket.close();
 
 			// Recepcion trama 4 o 5
-
-			// Crea socket en el que recibirá
-			//creaSocketRecibo(3000);
 
 			// Ajustar el tamaño del paquete??
 			DatagramPacket recibo4 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
 			
 			// Se queda esperando hasta que recibe la respuesta de uno de los servidores
-			//socketRecibo.receive(recibo4);
-			//socketRecibo.close();
+			creaSocket();
 			socket.receive(recibo4);
+			socket.close();
 
 			// Decodificar mensaje recibido
-			mensaje4 = new Mensaje();
+			Mensaje mensaje4 = new Mensaje();
 			mensaje4.decodificarMensaje(recibo4.getData());
 
 			// Mostrar mensaje recibido
@@ -161,8 +149,7 @@ public class Cliente {
 			System.out.println(mensaje4.toString());
 
 			// Fin del programa de cliente
-			socket.close();
-			
+						
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
