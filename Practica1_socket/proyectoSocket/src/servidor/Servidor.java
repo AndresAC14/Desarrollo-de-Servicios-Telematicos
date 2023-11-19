@@ -13,8 +13,6 @@ public class Servidor {
 	private static InetAddress ip;
 	private static int puerto;
 	// Crear variables para reenvio, timeout, retrasos
-	private static final int TIMEOUT = 7000; // Temporizador de 7 segundos para recibir 
-	private static final int MAXTRIES = 3;
 
 	// Información servidor
     private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa  
@@ -24,59 +22,60 @@ public class Servidor {
 				  
 		try {
 			
-			int tries = 0;
-			do{
-				// Crea socket en el que recibirá mensaje
-				creaSocket();
+			// Crea socket en el que recibirá mensaje
+			creaSocket();
 
-				System.out.println("Socket creado");
+			System.out.println("Socket creado");
 
-				// Cuidado con el tam
-				DatagramPacket recibo1 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
+			// Cuidado con el tam
+			DatagramPacket recibo1 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
+			
+			// Recibe el servidor y redirige el paquete a la hebra
+			// Espera a que llegue el mensaje
+			socket.receive(recibo1);
 
-				socket.setSoTimeout(TIMEOUT);
-				try {
-					// Recibe el servidor y redirige el paquete a la hebra
-					// Espera a que llegue el mensaje
-					socket.receive(recibo1);
-					
-				} catch (SocketTimeoutException e) {
-					tries++;
-					System.out.println("Se acabo el tiempo :(");
-				}
+			socket.close(); // Sino peta la hebra al mandar por el mismo puerto
 
-				socket.close(); // Sino peta la hebra al mandar por el mismo puerto
-	
-				Mensaje mensaje1 = new Mensaje();
-				mensaje1.decodificarMensaje(recibo1.getData());
-	
-				boolean servidorAceptado = (mensaje1.getCodigoServidorAceptado() == codigoServidor) 
-										&& (mensaje1.getNombreServidorAceptado().equals(nombreServidor));
-	
-				if(mensaje1.getCodigoMensaje().equals("1_Cliente_Solicita_Credencial")){
-	
-					ServidorThreadTrama1 servidorThread = new ServidorThreadTrama1(recibo1.getData());
-					new Thread(servidorThread).start();
-	
-				}else if(mensaje1.getCodigoMensaje().equals("3_Cliente_Acepta_Credencial") && servidorAceptado){
-	
-					ServidorThreadTrama3 servidorThread = new ServidorThreadTrama3(recibo1.getData());
-					new Thread(servidorThread).start();
-	
-				}else{
-					// NO es el servidor aceptado -> Poner como disponibles las credenciales, es decir, 
-					// coge idCliente y hacer algo en el fichero
-					System.out.println("NO es el servidor aceptado");
-				}	
-	
-				Thread.sleep(2000); // 2 segundos
-				System.out.println("Servidor en espera de que termine de procesarse el mensaje....");
-				
-				Thread.sleep(2000); 
-				System.out.println("Servidor listo para recibir...");
+			Mensaje mensaje1 = new Mensaje();
+			mensaje1.decodificarMensaje(recibo1.getData());
 
-			}while(tries < MAXTRIES);
+			if(mensaje1.getCodigoMensaje().equals("1_Cliente_Solicita_Credencial")){
 
+				ServidorThreadTrama1 servidorThread = new ServidorThreadTrama1(recibo1.getData());
+				new Thread(servidorThread).start();
+
+			}
+			
+			creaSocket();
+
+			// Cuidado con el tam
+			DatagramPacket recibo2 = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
+			
+			// Recibe el servidor y redirige el paquete a la hebra
+			// Espera a que llegue el mensaje
+			socket.receive(recibo2);
+
+			socket.close(); // Sino peta la hebra al mandar por el mismo puerto
+
+			Mensaje mensaje2 = new Mensaje();
+			mensaje1.decodificarMensaje(recibo2.getData());
+
+			boolean servidorAceptado = (mensaje2.getCodigoServidorAceptado() == codigoServidor) 
+									&& (mensaje2.getNombreServidorAceptado().equals(nombreServidor));
+			
+			
+			if(mensaje2.getCodigoMensaje().equals("3_Cliente_Acepta_Credencial") && servidorAceptado){
+
+				ServidorThreadTrama3 servidorThread = new ServidorThreadTrama3(recibo2.getData());
+				new Thread(servidorThread).start();
+
+			}else{
+				// NO es el servidor aceptado -> Poner como disponibles las credenciales, es decir, 
+				// coge idCliente y hacer algo en el fichero
+				System.out.println("NO es el servidor aceptado");
+			}	
+
+			System.out.println("FIN");
 
 		} catch (Exception e) {
 			e.printStackTrace();
