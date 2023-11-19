@@ -5,26 +5,25 @@ import java.net.*;
 import java.util.*;
 import mensaje.Mensaje;
 
-public class ServidorThread implements Runnable{
+public class ServidorThreadTrama1 implements Runnable{
 
-    // Informacion del servidor
+    // Socket
     private static InetAddress ip;
 	private static int puerto;
     private static DatagramSocket socket;
     
-    // Variables mensaje
+    // Información servidor
     private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa  
     private static int codigoServidor = 1;
-
+    
+    // Variables mensaje
     private static int idCliente;
-	private static int idServidor; // este es el recibido
 	private static InetAddress ipServidor;
-	
 	private static String codigoMensaje;
 	
+    // Información del fichero
 	private static int accesoN;
 	private static String asiento;
-	private static boolean aceptado; // Seria servidorAcepta
 	private static boolean encontrado;
     private static char asignado;
     private static int idFichero;
@@ -35,7 +34,7 @@ public class ServidorThread implements Runnable{
     private static Mensaje mensaje1;
     private static Mensaje mensaje2;
 
-    public ServidorThread(byte[] recibido){
+    public ServidorThreadTrama1(byte[] recibido){
 
         this.recibido = recibido;
 
@@ -44,7 +43,9 @@ public class ServidorThread implements Runnable{
     public void run(){
 
         try{
+            // Creamos nuevo mensaje en el que almacenar la trama
             mensaje1 = new Mensaje();
+
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(recibido);
             System.out.println("Mensaje decodificado");
@@ -53,45 +54,27 @@ public class ServidorThread implements Runnable{
             System.out.println("Mostrando mensaje recibido...");
             System.out.println(mensaje1.toString());
 
-            // Primero pillar el id de servidor -> 
-            idServidor = mensaje1.getIdServidor();
-            // si esta asignado y es distinto poner como disponibles las credenciales que ofrecieron
-            // si esta asignado y es igual, mandar mensaje con 4.Servidor confirma asignacion
-            ipServidor = InetAddress.getLocalHost();
-
-
-            //1. Comprobar que el id cliente se encuentra en el fichero
+            // Comprobar que el id cliente se encuentra en el fichero
             idCliente = mensaje1.getIdCliente();
             encontrado = false;
-
-            boolean servidorAceptado = (mensaje1.getCodigoServidorAceptado() == codigoServidor) 
-                                    && (mensaje1.getNombreServidorAceptado().equals(nombreServidor));
-
+                 
+            // PROCESAR FICHERO
+            procesarFichero();
+            
+            // Creamos el mensaje que llevará la trama 2
             mensaje2 = new Mensaje();
-            if(!servidorAceptado){
-                // Enviar el codigo 4
-                codigoMensaje = "4_Servidor_Confirma_Asignacion";
-                mensaje2.establecerAtributos(idCliente, idServidor, mensaje1.getIpCliente(), ipServidor, mensaje1.getNombreCliente(),
-                                                nombreServidor, codigoMensaje, codigoServidor, nombreServidor, mensaje1.getAccesoN(), 
-                                                mensaje1.getAsiento(), true, true);
 
+            // Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
+            codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
 
-            }else{
-
-                // PROCESAR FICHERO
-                procesarFichero();
-                
-                //3. Poner como asignadas las credenciales que envia al cliente. NI IDEA
-
-                // IMPORTANTE: Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
-                codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
-                
-                // Rellenamos los campos necesarios en la trama
-                mensaje2.establecerAtributos(idCliente, codigoServidor, mensaje1.getIpCliente(), ipServidor,
-                    mensaje1.getNombreCliente(), nombreServidor, codigoMensaje, 
-                    0, "sd", 
-                    accesoN, asiento, false, encontrado);
-            }
+            ipServidor = InetAddress.getLocalHost();
+            
+            // Rellenamos los campos necesarios en la trama
+            mensaje2.establecerAtributos(idCliente, codigoServidor, mensaje1.getIpCliente(), ipServidor,
+                mensaje1.getNombreCliente(), nombreServidor, codigoMensaje, 
+                0, "sd", 
+                accesoN, asiento, false, encontrado);
+        
             
             byte[] servidor_ofrece_credencial = mensaje2.codificarMensaje();
             
@@ -103,7 +86,6 @@ public class ServidorThread implements Runnable{
             
             System.out.println("Enviando mensaje con Hebra....");
 
-            DatagramSocket socket = new DatagramSocket();
             socket.send(envio);
 
         }catch(Exception e){
@@ -124,6 +106,7 @@ public class ServidorThread implements Runnable{
 		socket = new DatagramSocket(puerto);
 	}
 
+    // Busca en el fichero si el idCliente está asignado
     public static void procesarFichero(){
 
         try(Scanner sc = new Scanner("BaseDatos.txt")) {
@@ -137,13 +120,16 @@ public class ServidorThread implements Runnable{
                 accesoN = Integer.parseInt(partes[0]);
                 asiento = partes[1];
                 // Segun chatGPT se obtiene asi, sino pone del tiron
-                asignado = partes[2].charAt(0); 
+                asignado = partes[2].charAt(0); // esto tiene que servir para algo
+                //Id del fichero
                 idFichero = Integer.parseInt(partes[3]);
-    
-                // FALTAN COSAS
     
                 encontrado = (idCliente == idFichero);               
             }
+            
+            // FALTAN COSAS -> Poner como asignadas las credenciales es borrar la linea
+            // if(encontrado) asignarCredenciales(int linea);
+            // else if(!encontrado) accesoN = 0; asiento = "sd";
                     
         } catch (Exception e) {
             e.printStackTrace();
