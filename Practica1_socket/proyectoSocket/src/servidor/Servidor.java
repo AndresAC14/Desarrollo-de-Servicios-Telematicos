@@ -13,8 +13,8 @@ public class Servidor {
 	private static InetAddress ip;
 	private static int puerto;
 
-	// Información servidor
-    private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa  
+	// Información servidor -> Cambiar en los diferentes pc en los que se ejecute el programa
+    private static String nombreServidor = "S1";  
     private static int codigoServidor = 1;
 
 	public static void main(String[] args) throws IOException{
@@ -95,7 +95,7 @@ public class Servidor {
 		// Direccion de recepcion -> Broadcast
 		ip = InetAddress.getByName("192.168.18.255");
 		
-		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
+		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket UDP

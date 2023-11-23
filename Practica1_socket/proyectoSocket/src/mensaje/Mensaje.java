@@ -13,8 +13,8 @@ public class Mensaje {
 	private String nombreCliente;
 	private String nombreServidor;
 	private String codigoMensaje;
-	private int codigoServidorAceptado; // NUEVO
-	private String nombreServidorAceptado; // NUEVO
+	private int codigoServidorAceptado; 
+	private String nombreServidorAceptado; 
 	private int accesoN;
 	private String asiento;
 	private boolean aceptado; // Seria servidorAcepta 
@@ -22,7 +22,7 @@ public class Mensaje {
 
 	// Constructor por defecto
     public Mensaje() {
-        // Puedes inicializar los atributos con valores por defecto si lo deseas.
+        
     }
 
     // Constructor con parámetros para establecer los atributos al crear una instancia
@@ -167,19 +167,19 @@ public class Mensaje {
     	StringBuilder sb = new StringBuilder();
         sb.append(String.format("| %-30s | %-20s |%n", "Atributo", "Valor"));
         sb.append("|-------------------------------------------------------|\n");
-        sb.append(String.format("| %-30s | %-20d |%n", "idCliente", idCliente));
-        sb.append(String.format("| %-30s | %-20d |%n", "idServidor", idServidor));
-        sb.append(String.format("| %-30s | %-20s |%n", "ipCliente", ipCliente));
-        sb.append(String.format("| %-30s | %-20s |%n", "ipServidor", ipServidor));
-        sb.append(String.format("| %-30s | %-20s |%n", "nombreCliente", nombreCliente));
-        sb.append(String.format("| %-30s | %-20s |%n", "nombreServidor", nombreServidor));
-        sb.append(String.format("| %-30s | %-20s |%n", "codigoMensaje", codigoMensaje));
-        sb.append(String.format("| %-30s | %-20d |%n", "codigoServidorAceptado", codigoServidorAceptado));
-        sb.append(String.format("| %-30s | %-20s |%n", "nombreServidorAceptado", nombreServidorAceptado));
-        sb.append(String.format("| %-30s | %-20d |%n", "accesoN", accesoN));
-        sb.append(String.format("| %-30s | %-20s |%n", "asiento", asiento));
-        sb.append(String.format("| %-30s | %-20b |%n", "aceptado", aceptado));
-        sb.append(String.format("| %-30s | %-20b |%n", "encontrado", encontrado));
+        sb.append(String.format("| %-30s | %-30d |%n", "idCliente", idCliente));
+        sb.append(String.format("| %-30s | %-30d |%n", "idServidor", idServidor));
+        sb.append(String.format("| %-30s | %-30s |%n", "ipCliente", ipCliente));
+        sb.append(String.format("| %-30s | %-30s |%n", "ipServidor", ipServidor));
+        sb.append(String.format("| %-30s | %-30s |%n", "nombreCliente", nombreCliente));
+        sb.append(String.format("| %-30s | %-30s |%n", "nombreServidor", nombreServidor));
+        sb.append(String.format("| %-30s | %-30s |%n", "codigoMensaje", codigoMensaje));
+        sb.append(String.format("| %-30s | %-30d |%n", "codigoServidorAceptado", codigoServidorAceptado));
+        sb.append(String.format("| %-30s | %-30s |%n", "nombreServidorAceptado", nombreServidorAceptado));
+        sb.append(String.format("| %-30s | %-30d |%n", "accesoN", accesoN));
+        sb.append(String.format("| %-30s | %-30s |%n", "asiento", asiento));
+        sb.append(String.format("| %-30s | %-30b |%n", "aceptado", aceptado));
+        sb.append(String.format("| %-30s | %-30b |%n", "encontrado", encontrado));
         sb.append("|-------------------------------------------------------|\n");
         return sb.toString();
     }

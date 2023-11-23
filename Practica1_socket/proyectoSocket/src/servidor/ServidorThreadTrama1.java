@@ -12,21 +12,17 @@ public class ServidorThreadTrama1 implements Runnable{
 	private static int puerto;
     private static DatagramSocket socket;
     
-    // Información servidor
-    private static String nombreServidor = "S1"; // Cambiar en los diferentes pc en los que se ejecute el programa  
+    // Información servidor -> Cambiar en los diferentes pc en los que se ejecute el programa  
+    private static String nombreServidor = "S1";
     private static int codigoServidor = 1;
     
     // Variables mensaje
-    private static int idCliente;
 	private static InetAddress ipServidor;
 	private static String codigoMensaje;
 	
     // Información del fichero
 	private static int accesoN;
 	private static String asiento;
-	private static boolean encontrado;
-    private static char asignado;
-    private static int idFichero;
 
     // Tramas
     private byte[] recibido;
@@ -53,11 +49,11 @@ public class ServidorThreadTrama1 implements Runnable{
             System.out.println(mensaje1.toString());
 
             // Comprobar que el id cliente se encuentra en el fichero
-            idCliente = mensaje1.getIdCliente();
-            encontrado = false;
+            int idCliente = mensaje1.getIdCliente();
+            boolean encontrado = estaInscrito(idCliente); 
                  
             // Procesa el fichero
-            procesarFichero();
+            if(encontrado) procesarFichero(idCliente);
             
             // Creamos el mensaje que llevará la trama 2
             Mensaje mensaje2 = new Mensaje();
@@ -106,7 +102,7 @@ public class ServidorThreadTrama1 implements Runnable{
 		// Direccion de envio -> Broadcast
 		ip = InetAddress.getByName("192.168.18.255");
 		
-		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
+		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket UDP
@@ -114,24 +110,52 @@ public class ServidorThreadTrama1 implements Runnable{
 	}
 
     // Busca en el fichero si el idCliente está asignado
-    public static void procesarFichero(){
+    public static boolean estaInscrito(int idCliente){
 
-        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BaseDatos.txt"))) {
+        boolean encontrado = false;
+        int id = -1;
+        
+        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/Inscritos.txt"))) {
             
             while(sc.hasNextLine() && !encontrado){
                 String linea = sc.nextLine();
                         
                 String[] partes = linea.split(";");
     
-                //2. Mensaje 2 -> Contiene accesoN, asiento e identificador servidor
+                //Id del fichero
+                id = Integer.parseInt(partes[0]);
+    
+                encontrado = (idCliente == id);               
+            }
+                    
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return encontrado;
+    }
+
+    // Guarda accesoN y asiento segun el id indicado
+    public static void procesarFichero(int idCliente){
+
+        boolean encontrado = false;
+        int id = -1;
+        char asignado;
+
+        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt"))) {
+            
+            while(sc.hasNextLine() && !encontrado){
+                String linea = sc.nextLine();
+                        
+                String[] partes = linea.split(";");
+    
                 accesoN = Integer.parseInt(partes[0]);
                 asiento = partes[1];
-                // Segun chatGPT se obtiene asi, sino pone del tiron
-                asignado = partes[2].charAt(0); // esto tiene que servir para algo
+                asignado = partes[2].charAt(0);
                 //Id del fichero
-                idFichero = Integer.parseInt(partes[3]);
+                id = Integer.parseInt(partes[3]);
     
-                encontrado = (idCliente == idFichero);               
+                encontrado = (idCliente == id);               
             }
             
             // FALTAN COSAS -> Poner como asignadas las credenciales es borrar la linea

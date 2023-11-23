@@ -2,7 +2,6 @@ package cliente;
 
 import java.io.*;
 import java.net.*;
-//import java.util.*;
 
 import mensaje.Mensaje;
 
@@ -32,8 +31,8 @@ public class Cliente {
 			int idCliente = Integer.parseInt(stdIn.readLine());
 			
 			// Usuario introduce su nombre en la terminal
-			System.out.println("Introducir nombre de usuario");
-			String nombreCliente = stdIn.readLine();
+			//System.out.println("Introducir nombre de usuario");
+			String nombreCliente = "Andres"; //stdIn.readLine();
 
 			// Codigo del mensaje 1
 			String codigoMensaje = "1_Cliente_Solicita_Credencial";
@@ -173,7 +172,7 @@ public class Cliente {
 		// Direccion de envio -> Broadcast
 		ip = InetAddress.getByName("192.168.18.255");
 		
-		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
+		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket UDP

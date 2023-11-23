@@ -2,7 +2,6 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import mensaje.Mensaje;
 
 public class ServidorThreadTrama3 implements Runnable{
@@ -84,7 +83,7 @@ public class ServidorThreadTrama3 implements Runnable{
 		// Direccion de envio -> Broadcast
 		ip = InetAddress.getByName("192.168.18.255");
 		
-		// Puerto de envio, elegimos el 3000 pero habra que cambiarlo
+		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket UDP
