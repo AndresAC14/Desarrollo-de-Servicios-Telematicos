@@ -165,22 +165,22 @@ public class Mensaje {
     @Override
     public String toString() {
     	StringBuilder sb = new StringBuilder();
-        sb.append(String.format("| %-30s | %-20s |%n", "Atributo", "Valor"));
-        sb.append("|-------------------------------------------------------|\n");
-        sb.append(String.format("| %-30s | %-30d |%n", "idCliente", idCliente));
-        sb.append(String.format("| %-30s | %-30d |%n", "idServidor", idServidor));
-        sb.append(String.format("| %-30s | %-30s |%n", "ipCliente", ipCliente));
-        sb.append(String.format("| %-30s | %-30s |%n", "ipServidor", ipServidor));
-        sb.append(String.format("| %-30s | %-30s |%n", "nombreCliente", nombreCliente));
-        sb.append(String.format("| %-30s | %-30s |%n", "nombreServidor", nombreServidor));
-        sb.append(String.format("| %-30s | %-30s |%n", "codigoMensaje", codigoMensaje));
-        sb.append(String.format("| %-30s | %-30d |%n", "codigoServidorAceptado", codigoServidorAceptado));
-        sb.append(String.format("| %-30s | %-30s |%n", "nombreServidorAceptado", nombreServidorAceptado));
-        sb.append(String.format("| %-30s | %-30d |%n", "accesoN", accesoN));
-        sb.append(String.format("| %-30s | %-30s |%n", "asiento", asiento));
-        sb.append(String.format("| %-30s | %-30b |%n", "aceptado", aceptado));
-        sb.append(String.format("| %-30s | %-30b |%n", "encontrado", encontrado));
-        sb.append("|-------------------------------------------------------|\n");
+        sb.append(String.format("| %-30s | %-40s |%n", "Atributo", "Valor"));
+        sb.append("|----------------------------------------------------------------------|\n");
+        sb.append(String.format("| %-30s | %-40d |%n", "idCliente", idCliente));
+        sb.append(String.format("| %-30s | %-40d |%n", "idServidor", idServidor));
+        sb.append(String.format("| %-30s | %-40s |%n", "ipCliente", ipCliente));
+        sb.append(String.format("| %-30s | %-40s |%n", "ipServidor", ipServidor));
+        sb.append(String.format("| %-30s | %-40s |%n", "nombreCliente", nombreCliente));
+        sb.append(String.format("| %-30s | %-40s |%n", "nombreServidor", nombreServidor));
+        sb.append(String.format("| %-30s | %-40s |%n", "codigoMensaje", codigoMensaje));
+        sb.append(String.format("| %-30s | %-40d |%n", "codigoServidorAceptado", codigoServidorAceptado));
+        sb.append(String.format("| %-30s | %-40s |%n", "nombreServidorAceptado", nombreServidorAceptado));
+        sb.append(String.format("| %-30s | %-40d |%n", "accesoN", accesoN));
+        sb.append(String.format("| %-30s | %-40s |%n", "asiento", asiento));
+        sb.append(String.format("| %-30s | %-40b |%n", "aceptado", aceptado));
+        sb.append(String.format("| %-30s | %-40b |%n", "encontrado", encontrado));
+        sb.append("|----------------------------------------------------------------------|\n");
         return sb.toString();
     }
 

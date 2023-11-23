@@ -140,31 +140,63 @@ public class ServidorThreadTrama1 implements Runnable{
 
         boolean encontrado = false;
         int id = -1;
+        int acc = 0;
+        String asi = "sd";
         char asignado;
+        String archivoEntrada = System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt";
+        
+        try {
+            // Abrir el archivo de entrada
+            BufferedReader br = new BufferedReader(new FileReader(archivoEntrada));
 
-        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt"))) {
-            
-            while(sc.hasNextLine() && !encontrado){
-                String linea = sc.nextLine();
-                        
+            // Crear un archivo temporal
+            String archivoTemporal = "archivo_temporal.txt";
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal));
+
+            // Leer el archivo línea por línea
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                // Dividir la línea en partes usando un punto y coma
                 String[] partes = linea.split(";");
-    
-                accesoN = Integer.parseInt(partes[0]);
-                asiento = partes[1];
-                asignado = partes[2].charAt(0);
-                //Id del fichero
-                id = Integer.parseInt(partes[3]);
-    
-                encontrado = (idCliente == id);               
-            }
-            
-            // FALTAN COSAS -> Poner como asignadas las credenciales es borrar la linea
-            // if(encontrado) asignarCredenciales(int linea);
-            if(!encontrado) accesoN = 0; asiento = "sd";
+
+                // Obtener los valores
+                acc = Integer.parseInt(partes[0].trim());
+                asi = partes[1].trim();
+                asignado = partes[2].trim().charAt(0);
+
+                // Modificar la línea si es 'N'
+                if (asignado == 'N') {
+                    // Añadir el identificador
+                    linea = String.format("%d;%s;%c;%d;", acc, asi, asignado, idCliente);
                     
-        } catch (Exception e) {
+                    // Guardar accesoN y asiento para la trama
+                    accesoN = acc;
+                    asiento = asi;
+                }
+
+                // Escribir la línea en el archivo temporal
+                bw.write(linea);
+                bw.newLine();
+            }
+
+            // Cerrar los archivos
+            br.close();
+            bw.close();
+
+            // Renombrar el archivo temporal al archivo de entrada original
+            File archivoOriginal = new File(archivoEntrada);
+            File archivoRenombrado = new File(archivoTemporal);
+
+            if (archivoRenombrado.renameTo(archivoOriginal)) {
+                System.out.println("Archivo modificado con éxito.");
+            } else {
+                System.out.println("Error al renombrar el archivo.");
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
 
 }

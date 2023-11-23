@@ -87,7 +87,6 @@ public class ServidorThreadTrama3 implements Runnable{
 		puerto = 3000;
 
 		// Creacion del socket UDP
-		//socketEnvio = new DatagramSocket();
 		socket = new DatagramSocket(puerto);
 	}
 
