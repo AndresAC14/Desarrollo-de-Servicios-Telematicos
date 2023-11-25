@@ -27,11 +27,11 @@ public class Cliente {
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
 			// Usuario introduce su identificador en la terminal
-			System.out.println("Introducir identificador del cliente");
+			System.out.println("Introducir identificador de cliente");
 			int idCliente = Integer.parseInt(stdIn.readLine());
 			
 			// Usuario introduce su nombre en la terminal
-			//System.out.println("Introducir nombre de usuario");
+			//System.out.println("Introducir nombre de cliente");
 			String nombreCliente = "Andres"; //stdIn.readLine();
 
 			// Codigo del mensaje 1

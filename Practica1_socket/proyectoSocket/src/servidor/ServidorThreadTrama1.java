@@ -165,13 +165,14 @@ public class ServidorThreadTrama1 implements Runnable{
                 asignado = partes[2].trim().charAt(0);
 
                 // Modificar la línea si es 'N'
-                if (asignado == 'N') {
+                if (asignado == 'N' && !encontrado) {
                     // Añadir el identificador
                     linea = String.format("%d;%s;%c;%d;", acc, asi, asignado, idCliente);
-                    
+
                     // Guardar accesoN y asiento para la trama
                     accesoN = acc;
                     asiento = asi;
+                    encontrado = true;
                 }
 
                 // Escribir la línea en el archivo temporal
