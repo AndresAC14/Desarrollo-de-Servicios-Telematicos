@@ -4,6 +4,8 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.io.*;
 
+// Código realizado por Andres Amo Caballero
+
 public class Mensaje {
 	
 	private int idCliente;

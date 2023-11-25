@@ -9,6 +9,8 @@ import java.nio.file.StandardCopyOption;
 
 import mensaje.Mensaje;
 
+// Código realizado por Andres Amo Caballero
+
 public class Servidor {
 
 	// Tam. maximo de mensaje

@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import mensaje.Mensaje;
 
+// Código realizado por Andres Amo Caballero
+
 public class ServidorThreadTrama3 implements Runnable{
 
     // Socket

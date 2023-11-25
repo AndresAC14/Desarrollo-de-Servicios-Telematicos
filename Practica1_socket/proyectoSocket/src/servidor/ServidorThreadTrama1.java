@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import mensaje.Mensaje;
 
+// Código realizado por Andres Amo Caballero
+
 public class ServidorThreadTrama1 implements Runnable{
 
     // Socket
@@ -167,7 +169,7 @@ public class ServidorThreadTrama1 implements Runnable{
                 // Modificar la línea si es 'N'
                 if (asignado == 'N' && !encontrado) {
                     // Añadir el identificador
-                    linea = String.format("%d;%s;%c;%d;", acc, asi, asignado, idCliente);
+                    linea = String.format("%d;%s;%c;%d;", acc, asi, 'S', idCliente);
 
                     // Guardar accesoN y asiento para la trama
                     accesoN = acc;
