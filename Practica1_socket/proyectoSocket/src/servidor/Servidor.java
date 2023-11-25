@@ -2,6 +2,10 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import mensaje.Mensaje;
 
@@ -34,6 +38,12 @@ public class Servidor {
 
 			// Cerramos para que no haya problemas
 			socket.close(); 
+
+			// Antes de nada creamos copia del fichero, en caso de que finalmente no sea seleccionado este servidor, revertir los cambios
+			String nombreArchivo = System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt";
+			String copiaTemporal = "copiaTemp.txt";
+			// Crear copia temporal
+            copiarArchivo(nombreArchivo, copiaTemporal);
 
 			// Crea mensaje nuevo
 			Mensaje mensaje1 = new Mensaje();
@@ -77,8 +87,10 @@ public class Servidor {
 				new Thread(servidorThread).start();
 
 			}else{
-				// NO es el servidor aceptado -> Poner como disponibles las credenciales, es decir, coge idCliente y hacer algo en el fichero
 				System.out.println("NO es el servidor aceptado");
+
+				// Restaurar archivo original desde la copia temporal
+                restaurarDesdeCopiaTemporal(copiaTemporal, nombreArchivo);
 			}	
 
 			// Retardo
@@ -101,5 +113,22 @@ public class Servidor {
 		// Creacion del socket UDP
 		socket = new DatagramSocket(puerto);
 	}
+
+	// Metodos auxiliares para crear y restaurar el fichero en caso de no ser el servidor elegido
+	private static void copiarArchivo(String origen, String destino) throws IOException {
+        Path origenPath = Paths.get(origen);
+        Path destinoPath = Paths.get(destino);
+
+        // Copiar el archivo
+        Files.copy(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void restaurarDesdeCopiaTemporal(String copiaTemporal, String destino) throws IOException {
+        Path copiaTemporalPath = Paths.get(copiaTemporal);
+        Path destinoPath = Paths.get(destino);
+
+        // Restaurar el archivo desde la copia temporal
+        Files.copy(copiaTemporalPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+    }
 
 }
