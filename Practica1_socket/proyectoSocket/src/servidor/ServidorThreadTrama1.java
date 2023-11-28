@@ -23,8 +23,8 @@ public class ServidorThreadTrama1 implements Runnable{
 	private static String codigoMensaje;
 	
     // Información del fichero
-	private static int accesoN;
-	private static String asiento;
+	private static int accesoN = 0;
+	private static String asiento = "sd";
 
     // Tramas
     private byte[] recibido;

@@ -172,7 +172,7 @@ public class Cliente {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de envio -> Broadcast
-		ip = InetAddress.getByName("192.168.1.255");
+		ip = InetAddress.getByName("192.168.18.255");
 		
 		// Puerto de envio
 		puerto = 3000;
