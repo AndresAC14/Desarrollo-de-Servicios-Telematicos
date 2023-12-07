@@ -41,9 +41,10 @@ public class Servidor {
 			// Cerramos para que no haya problemas
 			socket.close(); 
 
-			// Antes de nada creamos copia del fichero, en caso de que finalmente no sea seleccionado este servidor, revertir los cambios
+			// Copia del fichero, en caso de que finalmente no sea seleccionado este servidor, revertir los cambios
 			String nombreArchivo = System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt";
 			String copiaTemporal = "copiaTemp.txt";
+			
 			// Crear copia temporal
             copiarArchivo(nombreArchivo, copiaTemporal);
 

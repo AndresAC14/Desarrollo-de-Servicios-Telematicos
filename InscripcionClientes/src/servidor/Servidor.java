@@ -27,9 +27,13 @@ public class Servidor {
 			
 			// Crea socket
 			creaSocket();
+			
+			System.out.println("Servidor iniciado");
 	
 			// Espera a recibir
 			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
+			
+			System.out.println("Esperando mensaje....");
 			
 			socket.receive(recibo);
 	
@@ -37,7 +41,7 @@ public class Servidor {
 			socket.close(); 
 	
 			// Decodificar id
-			int idCliente = ByteBuffer.wrap(recibo.getData()).getInt();
+			int idCliente = Integer.parseInt(new String(recibo.getData(), 0, recibo.getLength()));
 	
 			System.out.println("Mensaje recibido con contenido: " + idCliente);
 	
@@ -65,18 +69,18 @@ public class Servidor {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de recepcion -> Broadcast
-		ip = InetAddress.getByName("localhost"); // 192.168.56.255
+		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
 		
 		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket UDP
-		socket = new DatagramSocket();
+		socket = new DatagramSocket(puerto);
 	}
 
 	public static void procesarFichero(int id){
 
-		String archivoEntrada = System.getProperty("user.dir") + "/inscripcionClientes/src/servidor/inscripcion.txt";
+		String archivoEntrada = System.getProperty("user.dir") + "/src/servidor/inscripcion.txt";
 
 		// Obtener el último valor de accesoN del archivo
         int ultimoAccesoN = obtenerUltimoAccesoN(archivoEntrada);

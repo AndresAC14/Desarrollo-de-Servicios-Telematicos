@@ -46,7 +46,8 @@ public class Cliente {
 			System.out.printf("Identificador obtenido por el cliente %s: %d \n", nombreCliente, identificador);
 			
 			// Codificacion mensaje antes de enviar
-			byte[] trama = ByteBuffer.allocate(4).putInt(identificador).array();
+			String contenido = ""+identificador;
+			byte[] trama = contenido.getBytes();
 
 			// Crea socket
 			creaSocket();
@@ -88,7 +89,7 @@ public class Cliente {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de envio -> Broadcast
-		ip = InetAddress.getByName("localhost"); // 192.168.56.255
+		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
 		
 		// Puerto de envio
 		puerto = 3000;
