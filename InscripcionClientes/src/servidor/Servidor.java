@@ -8,12 +8,9 @@ import java.util.Scanner;
 // Código realizado por Andres Amo Caballero
 
 public class Servidor {
-
-	// Tam. maximo de mensaje
-	private static final int ECHOMAX = 255;
 	
 	// Socket
-	private static DatagramSocket socket;
+	private static Socket socket;
 	private static InetAddress ip;
 	private static int puerto;
 
@@ -27,37 +24,38 @@ public class Servidor {
 			
 			// Crea socket
 			creaSocket();
-			
-			System.out.println("Servidor iniciado");
+			boolean terminar = false;
+
+			while(!terminar){
+
+				// Con BufferedReader leemos lo que recibimos
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	
-			// Espera a recibir
-			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
-			
-			System.out.println("Esperando mensaje....");
-			
-			socket.receive(recibo);
-	
-			// Cerramos para que no haya problemas
-			socket.close(); 
-	
-			// Decodificar id
-			int idCliente = Integer.parseInt(new String(recibo.getData(), 0, recibo.getLength()));
-	
-			System.out.println("Mensaje recibido con contenido: " + idCliente);
-	
-			// Escribe en el fichero el id que ha recibido
-			procesarFichero(idCliente);
-			
-			// Codificacion mensaje antes de enviar
-			String msg = accesoN + ";" + asiento;
-			byte[] trama = msg.getBytes();
-	
-			// ENVIAR identificador
-			creaSocket();
-	
-			DatagramPacket envio = new DatagramPacket(trama, trama.length, ip, puerto);
-	
-			socket.send(envio);
+				// Con PrintWriter enviamos
+				PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
+				
+				System.out.println("Servidor iniciado");			
+				System.out.println("Esperando mensaje....");
+				
+				String mensajeRecibido = in.readLine();
+		
+				// Decodificar id
+				int idCliente = Integer.parseInt(mensajeRecibido);
+		
+				System.out.println("Mensaje recibido con contenido: " + idCliente);
+		
+				// Escribe en el fichero el id que ha recibido
+				procesarFichero(idCliente);
+				
+				// Codificacion mensaje antes de enviar
+				String mensajeEnvio = accesoN + ";" + asiento;
+		
+				out.println(mensajeEnvio);
+
+				// Cerramos el envio y la recepcion
+				out.close();
+				in.close();
+			}
 	
 			socket.close();
 
@@ -68,14 +66,14 @@ public class Servidor {
 	}
 
 	public static void creaSocket() throws IOException {
-		// Direccion de recepcion -> Broadcast
+		// Direccion de envio -> Broadcast
 		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
 		
 		// Puerto de envio
 		puerto = 3000;
 
-		// Creacion del socket UDP
-		socket = new DatagramSocket(puerto);
+		// Creacion del socket TCP
+		socket = new Socket(ip, puerto);
 	}
 
 	public static void procesarFichero(int id){

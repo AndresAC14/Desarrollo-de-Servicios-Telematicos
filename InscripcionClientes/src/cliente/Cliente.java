@@ -2,23 +2,28 @@ package cliente;
 
 import java.io.*;
 import java.net.*;
-import java.nio.ByteBuffer;
 
 // Código realizado por Andres Amo Caballero
 
 public class Cliente {
 
-	// Tam. maximo de mensaje
-	private static final int ECHOMAX = 255;
-
 	// Socket
-	private static DatagramSocket socket;
+	private static Socket socket;
 	private static InetAddress ip;
 	private static int puerto;
 	
 	public static void main(String[] args) {
 		try {
 		
+			// Crea socket
+			creaSocket();
+
+			// Con BufferedReader leemos lo que recibimos
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			// Con PrintWriter enviamos
+	        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
+
 			// Leemos los atributos de consola		
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
@@ -29,7 +34,7 @@ public class Cliente {
 			// Usuario introduce su nombre en la terminal
 			System.out.println("Introducir nombre de cliente");
 			String nombreCliente = stdIn.readLine();
-			
+			stdIn.close();
 			
 			// Devuelve la suma de los valores ascii de cada caracter del nombre del cliente
 			int valorAscii = 0;
@@ -45,36 +50,20 @@ public class Cliente {
 			
 			System.out.printf("Identificador obtenido por el cliente %s: %d \n", nombreCliente, identificador);
 			
-			// Codificacion mensaje antes de enviar
+			// Envio del mensaje
 			String contenido = ""+identificador;
-			byte[] trama = contenido.getBytes();
-
-			// Crea socket
-			creaSocket();
-
-			DatagramPacket envio = new DatagramPacket(trama, trama.length, ip, puerto);
-
 			System.out.println("Enviando identificador...");
-			socket.send(envio);
-			socket.close();
+			out.println(contenido);
+			out.close();
 
-			// Crea socket
-			creaSocket();
-	
 			// Espera a recibir
-			DatagramPacket recibo = new DatagramPacket(new byte[ECHOMAX], ECHOMAX);
-			
-			socket.receive(recibo);
-	
-			// Cerramos para que no haya problemas
-			socket.close(); 
+			String mensajeRecibido = in.readLine();
+			in.close();
 
-			String mensaje = new String(recibo.getData());
-			
 			// Mostrar mensaje recibido
-			System.out.println("Mensaje recibido con contenido: " + mensaje);
+			System.out.println("Mensaje recibido con contenido: " + mensajeRecibido);
 			
-			String[] partes = mensaje.split(";");
+			String[] partes = mensajeRecibido.split(";");
 			
 			int accesoN = Integer.parseInt(partes[0]);
 			String asiento = partes[1];
@@ -88,14 +77,14 @@ public class Cliente {
 	}
 
 	public static void creaSocket() throws IOException {
-		// Direccion de envio -> Broadcast
+		// Direccion de envio
 		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
 		
 		// Puerto de envio
 		puerto = 3000;
 
-		// Creacion del socket UDP
-		socket = new DatagramSocket(puerto);
+		// Creacion del socket TCP
+		socket = new Socket(ip, puerto);
 	}
 
 }
