@@ -114,7 +114,7 @@ public class ServidorThreadTrama1 implements Runnable{
         boolean encontrado = false;
         int id = -1;
         
-        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/proyectoSocket/src/servidor/Inscritos.txt"))) {
+        try(Scanner sc = new Scanner(new File(System.getProperty("user.dir") + "/src/servidor/Inscritos.txt"))) {
             
             while(sc.hasNextLine() && !encontrado){
                 String linea = sc.nextLine();
@@ -142,7 +142,7 @@ public class ServidorThreadTrama1 implements Runnable{
         int acc = 0;
         String asi = "sd";
         char asignado;
-        String archivoEntrada = System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt";
+        String archivoEntrada = System.getProperty("user.dir") + "/src/servidor/BD1.txt";
         
         try {
             // Abrir el archivo de entrada

@@ -27,6 +27,13 @@ public class Servidor {
 				  
 		try {
 			
+			// Copia del fichero, en caso de que finalmente no sea seleccionado este servidor, revertir los cambios
+			String nombreArchivo = System.getProperty("user.dir") + "/src/servidor/BD1.txt";
+			String copiaTemporal = "copiaTemp.txt";
+			
+			// Crear copia temporal
+			copiarArchivo(nombreArchivo, copiaTemporal);
+			
 			while(true){
 				
 				// Crea socket
@@ -42,14 +49,7 @@ public class Servidor {
 
 				// Cerramos para que no haya problemas
 				socket.close(); 
-
-				// Copia del fichero, en caso de que finalmente no sea seleccionado este servidor, revertir los cambios
-				String nombreArchivo = System.getProperty("user.dir") + "/proyectoSocket/src/servidor/BD1.txt";
-				String copiaTemporal = "copiaTemp.txt";
 				
-				// Crear copia temporal
-				copiarArchivo(nombreArchivo, copiaTemporal);
-
 				// Crea mensaje nuevo
 				Mensaje mensaje = new Mensaje();
 				mensaje.decodificarMensaje(recibo.getData());
@@ -63,23 +63,22 @@ public class Servidor {
 
 					ServidorThreadTrama1 servidorThread = new ServidorThreadTrama1(recibo.getData(), nombreServidor, codigoServidor);
 					new Thread(servidorThread).start();
-
+					
+					Thread.sleep(1000);
 				}else if(mensaje.getCodigoMensaje().equals("3_Cliente_Acepta_Credencial") && servidorAceptado){
 
 					ServidorThreadTrama3 servidorThread = new ServidorThreadTrama3(recibo.getData());
 					new Thread(servidorThread).start();
-
-				}else{
+					Thread.sleep(1000);
+				}else if(!servidorAceptado){
 					System.out.println("NO es el servidor aceptado");
-
 					// Restaurar archivo original desde la copia temporal
 					restaurarDesdeCopiaTemporal(copiaTemporal, nombreArchivo);
 				}	
-
-				// Retardo
-				Thread.sleep(2000);
+				
 				System.out.println("FIN");
 			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
