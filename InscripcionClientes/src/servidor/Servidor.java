@@ -70,9 +70,6 @@ public class Servidor {
 	}
 
 	public static void creaSocket() throws IOException {
-		// Direccion de envio
-		//ip = InetAddress.getByName("localhost"); // 192.168.18.39
-		
 		// Puerto de envio
 		puerto = 3000;
 
@@ -92,8 +89,8 @@ public class Servidor {
 	}
 
 	public static void procesarFichero(int id){
-
-		String archivoEntrada = System.getProperty("user.dir") + "/src/servidor/inscripcion.txt";
+		// La ruta del fichero hay veces que no la encuentra, en ese caso, cambiarla
+		String archivoEntrada = System.getProperty("user.dir") + "/InscripcionClientes/src/servidor/inscripcion.txt";
 
 		// Obtener el último valor de accesoN del archivo
         int ultimoAccesoN = obtenerUltimoAccesoN(archivoEntrada);
