@@ -10,7 +10,8 @@ import java.util.Scanner;
 public class Servidor {
 	
 	// Socket
-	private static Socket socket;
+	private static ServerSocket socket;
+	private static Socket socketEnvio;
 	private static InetAddress ip;
 	private static int puerto;
 
@@ -24,21 +25,18 @@ public class Servidor {
 			
 			// Crea socket
 			creaSocket();
-			boolean terminar = false;
 
-			while(!terminar){
+			while(true){
+				Socket nuevoSocket = socket.accept();
 
 				// Con BufferedReader leemos lo que recibimos
-				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				BufferedReader in = new BufferedReader(new InputStreamReader(nuevoSocket.getInputStream()));
 	
-				// Con PrintWriter enviamos
-				PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
-				
 				System.out.println("Servidor iniciado");			
 				System.out.println("Esperando mensaje....");
 				
 				String mensajeRecibido = in.readLine();
-		
+				
 				// Decodificar id
 				int idCliente = Integer.parseInt(mensajeRecibido);
 		
@@ -49,15 +47,21 @@ public class Servidor {
 				
 				// Codificacion mensaje antes de enviar
 				String mensajeEnvio = accesoN + ";" + asiento;
-		
+				
+				creaSocketEnvio();
+				
+				// Con PrintWriter enviamos
+				PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(nuevoSocket.getOutputStream())),true);
+				
 				out.println(mensajeEnvio);
 
-				// Cerramos el envio y la recepcion
-				out.close();
+				// Cerramos 
+				Thread.sleep(3000);
 				in.close();
+				out.close();
+				nuevoSocket.close();
 			}
 	
-			socket.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,14 +70,25 @@ public class Servidor {
 	}
 
 	public static void creaSocket() throws IOException {
-		// Direccion de envio -> Broadcast
-		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
+		// Direccion de envio
+		//ip = InetAddress.getByName("localhost"); // 192.168.18.39
 		
 		// Puerto de envio
 		puerto = 3000;
 
 		// Creacion del socket TCP
-		socket = new Socket(ip, puerto);
+		socket = new ServerSocket(puerto);
+	}
+	
+	public static void creaSocketEnvio() throws IOException {
+		// Direccion de envio 
+		ip = InetAddress.getByName("localhost"); // 192.168.18.39
+		
+		// Puerto de envio
+		puerto = 3000;
+
+		// Creacion del socket TCP
+		socketEnvio = new Socket(ip, puerto);
 	}
 
 	public static void procesarFichero(int id){

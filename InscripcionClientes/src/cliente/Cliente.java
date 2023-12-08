@@ -18,9 +18,6 @@ public class Cliente {
 			// Crea socket
 			creaSocket();
 
-			// Con BufferedReader leemos lo que recibimos
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
 			// Con PrintWriter enviamos
 	        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
 
@@ -54,11 +51,18 @@ public class Cliente {
 			String contenido = ""+identificador;
 			System.out.println("Enviando identificador...");
 			out.println(contenido);
-			out.close();
-
+			
+			Thread.sleep(3000);			
+			// Con BufferedReader leemos lo que recibimos
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			
 			// Espera a recibir
-			String mensajeRecibido = in.readLine();
-			in.close();
+			String mensajeRecibido = null;
+			do {
+				mensajeRecibido = in.readLine();
+				
+			}while(mensajeRecibido == null);
+			
 
 			// Mostrar mensaje recibido
 			System.out.println("Mensaje recibido con contenido: " + mensajeRecibido);
@@ -70,6 +74,8 @@ public class Cliente {
 			
 			System.out.printf("Los credenciales proporcionados al usuario son: \n AccesoN: %d \n Asiento: %s \n", accesoN, asiento);
 			
+			in.close();
+			out.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,7 +84,7 @@ public class Cliente {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de envio
-		ip = InetAddress.getByName("192.168.226.255"); // 192.168.56.255
+		ip = InetAddress.getByName("localhost"); // 192.168.18.39
 		
 		// Puerto de envio
 		puerto = 3000;
