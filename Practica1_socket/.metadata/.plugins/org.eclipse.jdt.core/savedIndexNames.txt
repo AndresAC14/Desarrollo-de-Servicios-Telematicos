@@ -1,0 +1,4 @@
+INDEX VERSION 1.134+C:\Users\andre\Documents\Curso 23-24\Desarrollo-de-Servicios-Telematicos\Practica1_socket\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+1201583785.index
+65952702.index

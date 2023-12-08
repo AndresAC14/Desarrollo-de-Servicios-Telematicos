@@ -14,14 +14,9 @@ public class ServidorThreadTrama1 implements Runnable{
 	private static int puerto;
     private static DatagramSocket socket;
     
-    // Información servidor -> Cambiar en los diferentes pc en los que se ejecute el programa  
-    private static String nombreServidor = "S1";
-    private static int codigoServidor = 1;
-    
-    // Variables mensaje
-	private static InetAddress ipServidor;
-	private static String codigoMensaje;
-	
+    private static String nombreServidor;
+    private static int codigoServidor;
+    	
     // Información del fichero
 	private static int accesoN = 0;
 	private static String asiento = "sd";
@@ -30,9 +25,11 @@ public class ServidorThreadTrama1 implements Runnable{
     private byte[] recibido;
     private static DatagramPacket envio;
     
-    public ServidorThreadTrama1(byte[] recibido){
+    public ServidorThreadTrama1(byte[] recibido, String nombreServidor, int codigoServidor){
 
         this.recibido = recibido;
+        this.nombreServidor = nombreServidor;
+        this.codigoServidor = codigoServidor;
 
     }
     
@@ -61,8 +58,8 @@ public class ServidorThreadTrama1 implements Runnable{
             Mensaje mensaje2 = new Mensaje();
 
             // Si no encuentra el identificador del cliente en el fichero, manda mensaje "5.servidor_no_encuentra_cliente"
-            codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
-            ipServidor = InetAddress.getLocalHost();
+            String codigoMensaje = encontrado ? "2_Servidor_Ofrece_Credencial" : "5_Servidor_No_Encuentra_Cliente";
+            InetAddress ipServidor = InetAddress.getLocalHost();
             
             // Rellenamos los campos necesarios en la trama
             mensaje2.establecerAtributos(idCliente, codigoServidor, mensaje1.getIpCliente(), ipServidor,

@@ -1,0 +1,38 @@
+package cliente;
+
+import java.io.*;
+import java.net.*;
+
+public class Cliente {
+
+	// Tam. maximo de mensaje
+	private static final int ECHOMAX = 1024;
+	
+	public static void main(String[] args) {
+		try {
+			
+			// Leemos los atributos de consola		
+			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+			
+			// Usuario introduce su identificador en la terminal
+			System.out.println("Introducir dni de cliente");
+			int dni = Integer.parseInt(stdIn.readLine());
+			
+			// Usuario introduce su nombre en la terminal
+			System.out.println("Introducir nombre de cliente");
+			String nombreCliente = stdIn.readLine();
+
+			
+			// Creación identificador
+			int identificador = (dni / 150) + Integer.valueOf(nombreCliente);
+			
+			System.out.println("valor identificador: " + identificador);
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

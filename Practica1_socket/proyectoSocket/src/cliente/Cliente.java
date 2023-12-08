@@ -33,8 +33,8 @@ public class Cliente {
 			int idCliente = Integer.parseInt(stdIn.readLine());
 			
 			// Usuario introduce su nombre en la terminal
-			//System.out.println("Introducir nombre de cliente");
-			String nombreCliente = "Andres"; //stdIn.readLine();
+			System.out.println("Introducir nombre de cliente");
+			String nombreCliente = stdIn.readLine();
 
 			// Codigo del mensaje 1
 			String codigoMensaje = "1_Cliente_Solicita_Credencial";
@@ -172,7 +172,7 @@ public class Cliente {
 
 	public static void creaSocket() throws IOException {
 		// Direccion de envio -> Broadcast
-		ip = InetAddress.getByName("192.168.226.255");
+		ip = InetAddress.getByName("192.168.18.255");
 		
 		// Puerto de envio
 		puerto = 3000;

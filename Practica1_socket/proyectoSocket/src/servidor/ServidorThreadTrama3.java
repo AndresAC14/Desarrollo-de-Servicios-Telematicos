@@ -12,16 +12,9 @@ public class ServidorThreadTrama3 implements Runnable{
     private static InetAddress ip;
 	private static int puerto;
     private static DatagramSocket socket;
-    
-    // Variables mensaje
-	private static String codigoMensaje;
-    private static InetAddress ipServidor;
 
     // Tramas
     private byte[] recibido;
-    private static DatagramPacket envio;
-    private static Mensaje mensaje1;
-    private static Mensaje mensaje2;
 
     public ServidorThreadTrama3(byte[] recibido){
 
@@ -33,7 +26,7 @@ public class ServidorThreadTrama3 implements Runnable{
 
         try{
             // Creamos nuevo mensaje en el que almacenar la trama
-            mensaje1 = new Mensaje();
+            Mensaje mensaje1 = new Mensaje();
 
             // Decodificamos el mensaje
             mensaje1.decodificarMensaje(recibido);
@@ -44,17 +37,13 @@ public class ServidorThreadTrama3 implements Runnable{
             System.out.println(mensaje1.toString());
 
             // Creamos el mensaje que llevará la trama 2
-            mensaje2 = new Mensaje();
+            Mensaje mensaje2 = new Mensaje();
             
             // Mensaje
-            codigoMensaje = "4_Servidor_Confirma_Asignacion";
-            ipServidor = InetAddress.getLocalHost();
-
-            // Lo unico diferente respecto a la trama recibida es el codigo del mensaje
             mensaje2.establecerAtributos(mensaje1.getIdCliente(), mensaje1.getIdServidor(), mensaje1.getIpCliente(), mensaje1.getIpServidor(),
-                                            mensaje1.getNombreCliente(), mensaje1.getNombreServidor(), codigoMensaje, mensaje1.getCodigoServidorAceptado(),
-                                            mensaje1.getNombreServidorAceptado(), mensaje1.getAccesoN(), mensaje1.getAsiento(), mensaje1.isAceptado(), 
-                                            mensaje1.isEncontrado());
+                                            mensaje1.getNombreCliente(), mensaje1.getNombreServidor(), "4_Servidor_Confirma_Asignacion", 
+                                            mensaje1.getCodigoServidorAceptado(), mensaje1.getNombreServidorAceptado(), mensaje1.getAccesoN(), 
+                                            mensaje1.getAsiento(), mensaje1.isAceptado(), mensaje1.isEncontrado());
 
             System.out.println("Mostrando mensaje antes del envio \n" + mensaje2.toString());
             
@@ -65,7 +54,7 @@ public class ServidorThreadTrama3 implements Runnable{
             creaSocket();
 
             // Creamos el datagrama que se enviara
-            envio = new DatagramPacket(servidor_confirma_asignacion, servidor_confirma_asignacion.length, ip, puerto);
+            DatagramPacket envio = new DatagramPacket(servidor_confirma_asignacion, servidor_confirma_asignacion.length, ip, puerto);
             
             System.out.println("Enviando trama con ServidorThreadTrama3....");
 
